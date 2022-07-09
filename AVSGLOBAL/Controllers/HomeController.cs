@@ -24,49 +24,8 @@ namespace AVSGLOBAL.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        [Route("login")]
-        [HttpGet]
-        public IActionResult Login(string UserName,string Password)
-        {
-
-            Mdl_User userModel = new Mdl_User();
-            userModel.Name = UserName;
-            userModel.Password = Password;
-
-
-            if (string.IsNullOrEmpty(userModel.Name) || string.IsNullOrEmpty(userModel.Password))
-            {
-                return (RedirectToAction("Error"));
-            }
-
-            IActionResult response = Unauthorized();
-            var validUser = GetUser(userModel);
-
-            if (validUser != null)
-            {
-                generatedToken = _tokenService.BuildToken(Cls_Settings.JWTKEY, Cls_Settings.JWTISSUER, validUser, HttpContext.Connection);
-
-                if (generatedToken != null)
-                {
-                    HttpContext.Session.SetString("Token", generatedToken);
-                    return RedirectToAction("MainWindow");
-                }
-                else
-                {
-                    return (RedirectToAction("Error"));
-                }
-            }
-            else
-            {
-                return (RedirectToAction("Error"));
-            }
-        }
-        private Mdl_User GetUser(Mdl_User userModel)
-        {
-            //Write your code here to authenticate the user
-            return _userRepository.GetUser(userModel);
-        }
+        
+     
 
         [Authorize]
         [Route("mainwindow")]

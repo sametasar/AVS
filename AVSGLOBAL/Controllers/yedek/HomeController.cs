@@ -16,20 +16,20 @@ public class HomeyedekController : Controller
 
     public IActionResult Index()
     {
-        DatabaseContext db = new DatabaseContext();
-        Mdl_User Kullanici = new Mdl_User();        
+        // DatabaseContext db = new DatabaseContext();
+        // Mdl_User Kullanici = new Mdl_User();        
             
-            Kullanici.Password = "asar";
-            Kullanici.Name = "samet";
-            Kullanici.Email = "sametasar@gmail.com";
-            Kullanici.Create_Date = DateTime.Now;
-            Kullanici.LastIP = "127.0.0.1";
-            Kullanici.LastLoginTime = DateTime.Now;
-            Kullanici.LastToken = "432823094329048093284";
+        //     Kullanici.Password = "asar";
+        //     Kullanici.Name = "samet";
+        //     Kullanici.Email = "sametasar@gmail.com";
+        //     Kullanici.Create_Date = DateTime.Now;
+        //     Kullanici.LastIP = "127.0.0.1";
+        //     Kullanici.LastLoginTime = DateTime.Now;
+        //     Kullanici.LastToken = "432823094329048093284";
 
 
-            db.User.Add(Kullanici);
-            db.SaveChanges();
+        //     db.User.Add(Kullanici);
+        //     db.SaveChanges();
 
 
         return View();

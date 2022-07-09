@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/home/postmanator/Projeler/AVSX/AVSGLOBAL/AVSGLOBAL.csproj": {}
+    "C:\\PROJELER\\AVS\\AVSGLOBAL\\AVSGLOBAL.csproj": {}
   },
   "projects": {
-    "/home/postmanator/Projeler/AVSX/AVSGLOBAL/AVSGLOBAL.csproj": {
+    "C:\\PROJELER\\AVS\\AVSGLOBAL\\AVSGLOBAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/postmanator/Projeler/AVSX/AVSGLOBAL/AVSGLOBAL.csproj",
+        "projectUniqueName": "C:\\PROJELER\\AVS\\AVSGLOBAL\\AVSGLOBAL.csproj",
         "projectName": "AVSGLOBAL",
-        "projectPath": "/home/postmanator/Projeler/AVSX/AVSGLOBAL/AVSGLOBAL.csproj",
-        "packagesPath": "/home/postmanator/.nuget/packages/",
-        "outputPath": "/home/postmanator/Projeler/AVSX/AVSGLOBAL/obj/",
+        "projectPath": "C:\\PROJELER\\AVS\\AVSGLOBAL\\AVSGLOBAL.csproj",
+        "packagesPath": "C:\\Users\\samet\\.nuget\\packages\\",
+        "outputPath": "C:\\PROJELER\\AVS\\AVSGLOBAL\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/postmanator/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\samet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -70,6 +76,10 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
+            "RestRequest": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[6.21.0, )"
@@ -93,7 +103,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

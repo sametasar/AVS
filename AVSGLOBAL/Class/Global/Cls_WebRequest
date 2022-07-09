@@ -1,0 +1,225 @@
+using Newtonsoft.Json;
+using System.Text;
+using System.Net;
+using System.IO;
+using System.Net.Http.Headers;
+using System.Dynamic;
+
+
+namespace AVSGLOBAL.Class.Global
+{
+
+
+/// <summary>
+/// Token kullanılan requestlerde atılacak requestde hangi token kullanılacak seçimi bu enumlarla yapılır.
+/// </summary>
+public enum TokenTypes{
+
+    Jwt = 0,
+
+    MicrosoftIdentity = 1,
+
+    OpenAuth = 2
+
+}  
+
+/// <summary>
+/// Atılacak requesting aksiyon tipini belirtmek için kullanılır, hangi yöntem post yada get tarzı seçim yapılmalıdır. 
+/// </summary>
+public enum ActionTypes{
+
+    Post = 0,
+
+    Get = 1,
+
+    Put = 2,
+
+    Delete =3
+
+}    
+
+public class WebRequestOption{
+
+    /// <summary>
+    /// Bu Url değeri eğer boş bırakılırsa default olarak değeri "Cls_Settings.MAIN_WEB_SERVICE" den alır.
+    /// </summary>
+    /// <value></value>
+    public string Url{get; set;}
+
+    /// <summary>
+    /// Url in ham kısmından sonra geriye kalan url yolu burada tanımlanır. Api yada Controller isimleri gibi. Sonuna dikkat edersen "/" işareti ile biter. Örnek olarak /Api/User/.
+    /// </summary>
+    /// <value></value>
+    public string ApiUrl{get; set;}
+
+
+    /// <summary>
+    /// Web servislerde yada Web apilerde controllar içindeki metoda karşılık gelir. Sonuna dikkat edersen "/" işareti ile bitmez  /Api/User/GetUser
+    /// </summary>
+    /// <value></value>
+    public string MethodName{get; set;}
+
+    
+    /// <summary>
+    /// Web apide erişilecek metot eğer parametrelere sahipse bu durumda parametreler burada yazılır. Parametreler Liste tipinde keyvalu şeklinde yazılır
+    /// </summary>
+    /// <value></value>
+    public List<KeyValuePair<string,string>> Parameters{get; set;}
+
+
+    /// <summary>
+    /// Atılacak requesting aksiyon tipini belirtmek için kullanılır, hangi yöntem post yada get tarzı seçim yapılmalıdır. 
+    /// </summary>
+    /// <value></value>
+    public ActionTypes ActionType{get; set;}
+
+
+    /// <summary>
+    /// Atılacak requestde token değeri varsa buradan set edilebilir.
+    /// </summary>
+    /// <value></value>
+    public string Token{get; set;}
+
+
+    /// <summary>
+    /// Token kullanılıyorsa bu durumda hangi token türü kullanılıyor buradan seçilebilir.Bu seçim yapılmazsa Token varsa default olarak JWT aktif olur. Token yoksa Default olarak Null olur ve kullanılmaz!
+    /// </summary>
+    /// <value></value>
+    public TokenTypes TokenType{get; set;}
+
+
+}
+
+
+
+/// <summary>
+/// Bu class daha kolay web requestlerin yönetilmesi için geliştirilmiştir.
+/// </summary>
+public static class Cls_WebRequest
+{    
+    static string serviceUrl = "";
+    static HttpClient client = new HttpClient();
+
+
+
+/// <summary>
+/// Web servislere , apilere yada web sitelerine request atmak için kullanılır.
+/// </summary>
+/// <param name="options">Atılacak request hangi url, hangi controller hangi parametreler, hangi yöntem kullanılacak tarzda bilgiler barındırır.</param>
+/// <returns></returns>
+public static async Task<string> SendRequest(WebRequestOption options)
+{
+            string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJzYW1ldCIsInNhbWV0Il0sInJvbGUiOlsiQWRtaW4iLCJBZG1pbiJdLCJlbWFpbCI6WyJzYW1ldGFzYXJAZ21haWwuY29tIiwic2FtZXRhc2FyQGdtYWlsLmNvbSJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoie1wiSVBBZGRyZXNzXCI6XCI6OjFcIixcIkJyb3dzZU5hbWVcIjpcIk1vemlsbGFcIixcIlRpbWVTdGFtcFwiOjE2NTczMzk3OTguNzcxNjgyNX0iLCJuYW1laWQiOiJmMzViMjQzNi1hYTdjLTRhZDAtYjI1NC01MTYzODU4YWUxYmEiLCJuYmYiOjE2NTczODAwODMsImV4cCI6MTY1NzM4MzY4MywiaWF0IjoxNjU3MzgwMDgzfQ.FSmgX-jd362DnsLUU2v08BLT-RJ7ISliNsv2pXZbMrM";
+            string URI = Cls_Settings.MAIN_WEB_SERVICE;
+            string myParameters = "";
+
+            string responseObj = string.Empty;  
+            // HTTP GET.  
+            using (var client = new HttpClient())  
+            { 
+            
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);                 
+                client.BaseAddress = new Uri(Cls_Settings.MAIN_WEB_SERVICE);                 
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));                  
+                HttpResponseMessage response = new HttpResponseMessage();                 
+                response = await client.GetAsync("/api/Get_Users").ConfigureAwait(false);  
+                // Verification  
+                if (response.IsSuccessStatusCode)  
+                {  
+                        
+                        var json = await response.Content.ReadAsStringAsync();
+                        
+                }  
+            }
+
+            return "";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    /// <summary>
+    /// Bu metot başka web servislerine request atmak için oluşturulmuştur.
+    /// </summary>
+    /// <param name="method">Web adresindeki hangi metot olduğu bilgisi. Örnek method  : Get_User</param>
+    /// <param name="page">Web adresindeki controllar a karşılık gelen api adı. Örnek Page : /api/personel/</param>
+    /// <returns></returns>
+    public static async Task<string> RequestGet(string method,string page)
+    {
+        serviceUrl = $"{Cls_Settings.MAIN_WEB_SERVICE}{page}{method}";
+        using (HttpResponseMessage response = await client.GetAsync(serviceUrl))
+            return await response.Content.ReadAsStringAsync();
+    }
+
+    
+    /// <summary>
+    /// Bu metot başka web servislerine request atmak için oluşturulmuştur.
+    /// </summary>
+    /// <param name="method">Web adresindeki hangi metot olduğu bilgisi. Örnek method  : Get_User</param>
+    /// <param name="page">Web adresindeki controllar a karşılık gelen api adı. Örnek Page : /api/personel/</param>
+    /// <param name="parameter">Çalıştırılacak web api metodunada parametre bilgisi varsa onlar burada belirtilir. Örnek Parameter :?ID=2&Age=18</param>
+    /// <returns></returns>
+    public static async Task<string> RequestGet(string method,string page, string parameter)
+    { 
+        serviceUrl = $"{Cls_Settings.MAIN_WEB_SERVICE}{page}{method}{parameter}";
+        using (HttpResponseMessage response = await client.GetAsync(serviceUrl))
+            return await response.Content.ReadAsStringAsync();
+    }
+
+
+
+    public static async Task<string> GetSingle(string method, int id)
+    {
+        serviceUrl = $"{Cls_Settings.MAIN_WEB_SERVICE}/api/personel/{method}/{id}";
+        using (HttpResponseMessage response = await client.GetAsync(serviceUrl))
+            return await response.Content.ReadAsStringAsync();
+    }
+    public static async Task<string> Post<T>(string method, T instance) where T : class, new()
+    {
+        serviceUrl = $"{Cls_Settings.MAIN_WEB_SERVICE}/api/personel/{method}";
+        StringContent httpContent = new StringContent(JsonConvert.SerializeObject(instance), Encoding.UTF8, "application/json");
+        using (HttpResponseMessage response = await client.PostAsync(serviceUrl, httpContent))
+        {
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+    }
+    public static async Task<string> Put<T>(string method, T instance) where T : class, new()
+    {
+        serviceUrl = $"{Cls_Settings.MAIN_WEB_SERVICE}/api/personel/{method}";
+        StringContent httpContent = new StringContent(JsonConvert.SerializeObject(instance), Encoding.UTF8, "application/json");
+        using (HttpResponseMessage response = await client.PutAsync(serviceUrl, httpContent))
+        {
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+    }
+    public static async Task<string> Delete(string method, int id)
+    {
+        serviceUrl = $"{Cls_Settings.MAIN_WEB_SERVICE}/api/personel/{method}/{id}";
+        using (HttpResponseMessage response = await client.DeleteAsync(serviceUrl))
+            return await response.Content.ReadAsStringAsync();
+    }
+}
+
+}

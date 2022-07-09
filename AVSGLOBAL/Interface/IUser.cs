@@ -4,6 +4,6 @@ namespace AVSGLOBAL.Interface
 {
     public interface IUser
     {
-        Mdl_User GetUser(Mdl_User userModel);
+        Task<Mdl_User> GetUser(Mdl_User userModel);
     }
 }

@@ -24,7 +24,9 @@ Cls_Settings.SMTPPort = builder.Configuration["Settings:SMTPPort"];
 Cls_Settings.JWTKEY = builder.Configuration["Settings:JWTKEY"];
 Cls_Settings.JWTISSUER = builder.Configuration["Settings:ISSUER"];
 Cls_Settings.JWTAUDIENCE = builder.Configuration["Settings:AUDIENCE"];
-
+//Ana Web Servisi Burada Belirtiyoruz! Tüm Gelen Requestleri Buraya Aktarabiliriz! Extar güvenli bir yapı inşaa edilmek istenirse.
+//Ana servisin ip adresi bu sayede yalnızca bizim tarafımızdan bilinecek istenildiği durumda ip trafiği değiştirilebilinecek.
+Cls_Settings.MAIN_WEB_SERVICE = builder.Configuration["Settings:MAIN_WEB_SERVICE"];
 
 builder.Services.AddAuthentication(auth =>
 {

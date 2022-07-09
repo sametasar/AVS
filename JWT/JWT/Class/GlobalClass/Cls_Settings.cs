@@ -1,4 +1,4 @@
-﻿namespace JWT.Class
+﻿namespace JWT.Class.GlobalClass
 {
     /// <summary>
     /// Projenin tüm ayarları buradan yönetilir.Default veritabanı bağlantı bilgileri.Default email hesap bilgileri,token ayar bilgileri.

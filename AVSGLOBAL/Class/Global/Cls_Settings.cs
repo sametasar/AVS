@@ -41,5 +41,7 @@
         public static string JWTISSUER {get; set;}
 
         public static string JWTAUDIENCE { get; set; }
+
+        public static string MAIN_WEB_SERVICE { get; set; }
     }
 }

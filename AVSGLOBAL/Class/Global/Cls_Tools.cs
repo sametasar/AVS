@@ -24,9 +24,9 @@ namespace AVSGLOBAL.Class.Global
             // builder.Password = "test";
             // builder.InitialCatalog = "AVSCAT";
             // builder.DataSource = ".";
-            builder.Password = "Asar-1234";
+            builder.Password = "test";
             builder.InitialCatalog = "AVSCATERING";
-            builder.DataSource = "ASAR";
+            builder.DataSource = ".";
             builder.PersistSecurityInfo = true;
             builder.TrustServerCertificate = true;
 
@@ -94,7 +94,8 @@ namespace AVSGLOBAL.Class.Global
                 }
             }
             return obj;
-        }
+        }       
+
     }
 
 }

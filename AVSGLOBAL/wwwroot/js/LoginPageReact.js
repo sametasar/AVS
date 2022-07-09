@@ -1,15 +1,15 @@
 
-/**
- Bu class Login sayfasında bulunan kontrollerdeki yazıları tek noktadan yönetmemizi sağlar.
- @memberof Cls_Login
- @property {string}   Title       login sayfasının başlık bilgisini tutar.
- @property {string}   UserName    Login sayfasında kullanıcı adı kontrolüne girilen değerleri tutar.
- @property {string}   Password    Login sayfasında Password kontrolüne girilen değeri tutar.
- @property {string}   Remember    Beni hatırla bilgisini barındırır.
- @property {string}   Button      Login buton bilgilerini üzerinde tutar.
- @property {string}   Register    Register bilgisini tutar.
- @property {string}   Forgot      Şifremi unuttum bilgisini üzerinde tutar.
- */
+// /**
+//  Bu class Login sayfasında bulunan kontrollerdeki yazıları tek noktadan yönetmemizi sağlar.
+//  @memberof Cls_Login
+//  @property {string}   Title       login sayfasının başlık bilgisini tutar.
+//  @property {string}   UserName    Login sayfasında kullanıcı adı kontrolüne girilen değerleri tutar.
+//  @property {string}   Password    Login sayfasında Password kontrolüne girilen değeri tutar.
+//  @property {string}   Remember    Beni hatırla bilgisini barındırır.
+//  @property {string}   Button      Login buton bilgilerini üzerinde tutar.
+//  @property {string}   Register    Register bilgisini tutar.
+//  @property {string}   Forgot      Şifremi unuttum bilgisini üzerinde tutar.
+//  */
 class Cls_Login {
 
     constructor(Title, UserName, Password, Remember,Button,Register,Forgot) {
@@ -154,12 +154,10 @@ class LoginButton extends React.Component {
         //    .then(function (response) {
         //        console.log(response.data);
         //        alert("İşlem Tamam");
-              
         //    })
         //    .catch(function (error) {
         //        console.log(error);
         //    });
-
 
         axios.get("/login?UserName=" + LoginObject.UserName + "&Password=" + LoginObject.Password + "")
             .then(function (response) {
@@ -169,7 +167,6 @@ class LoginButton extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-
 
             //Post için gerekli request örnei, daha fazla örnek için dökümantasyona bakabilirsin!
             //axios.post('/login', {
@@ -184,7 +181,6 @@ class LoginButton extends React.Component {
             //     console.log(error);
             //     alert("Şifre yanlış!");
             // });
-
     }
 
     render() {

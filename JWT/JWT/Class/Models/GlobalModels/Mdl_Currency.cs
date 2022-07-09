@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace JWT.Model
+namespace JWT.Class.Models.GlobalModels
 {
     public class Mdl_Currency
     {

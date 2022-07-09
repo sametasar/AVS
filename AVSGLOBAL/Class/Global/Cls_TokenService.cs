@@ -21,51 +21,34 @@ namespace AVSGLOBAL.Class.Global
             //Kimlik yapısını oluşturuyoruz.
             List<Claim> ClaimListesi = new List<Claim>();
             Claim ClaimA = new Claim(ClaimTypes.Name, user.Name);
-            //Claim ClaimB = new Claim(ClaimTypes.Role, user.Role);
-            //Claim ClaimC = new Claim(ClaimTypes.Email, user.Email);
+            Claim ClaimB = new Claim(ClaimTypes.Role, "Admin"); //todo Veritabanından gelen rolü burada tanımla! ileride yapılacak.
+            Claim ClaimC = new Claim(ClaimTypes.Email, user.Email);
 
             ///Doğrudan tanımlayamadığım özellikleri claime dolaylı olarak tanımlıyorum!
             Cls_ClaimUserData UserData = new Cls_ClaimUserData();
             UserData.IPAddress = Connection.RemoteIpAddress.ToString();
+            UserData.TimeStamp =  Cls_Tools.DateTime_To_Timestamp(DateTime.Now);
             UserData.BrowseName = "Mozilla";
             UserData.TimeStamp = Cls_Tools.DateTime_To_Timestamp(DateTime.Now);
             Claim ClaimD = new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(UserData));
             Claim ClaimE = new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString());
 
             ClaimListesi.Add(ClaimA);
-            //ClaimListesi.Add(ClaimB);
-            //ClaimListesi.Add(ClaimC);
+            ClaimListesi.Add(ClaimB);
+            ClaimListesi.Add(ClaimC);
             ClaimListesi.Add(ClaimD);
             ClaimListesi.Add(ClaimE);
 
             #endregion
 
-
-            /*   ALTERNATİF YÖNTEM
-            //Tokenimizi handle ederken, Token yaratırken bazı parametreler gerekli.
-            SecurityTokenDescriptor TokenDescriptor = new SecurityTokenDescriptor();
-            //Claim Identity İster
-            TokenDescriptor.Subject = new ClaimsIdentity(ClaimListesi);
-            //Datetim.Now yerine Datetime.UtcNow kullanmak uluslar arası projelerde daha doğru olacaktır.
-            TokenDescriptor.Expires = DateTime.UtcNow.AddHours(1);
-            SigningCredentials Credentials = new SigningCredentials(new SymmetricSecurityKey(TokenKey), SecurityAlgorithms.HmacSha256Signature);
-            TokenDescriptor.SigningCredentials = Credentials;
-
-            JwtSecurityTokenHandler TokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken Token = TokenHandler.CreateToken(TokenDescriptor);
-            return TokenHandler.WriteToken(Token);
-            */
-
             SymmetricSecurityKey SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
             SigningCredentials Credentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
             JwtSecurityToken TokenDescriptor = new JwtSecurityToken(issuer, issuer, ClaimListesi,
-               expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: Credentials);
-
+            expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: Credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(TokenDescriptor);
         }
-
 
         //public string GenerateJSONWebToken(string key, string issuer, Mdl_UserDTO user)
         //{

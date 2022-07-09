@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace JWT.Model
+namespace JWT.Class.Models.GlobalModels
 {
 
     /// <summary>

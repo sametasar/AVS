@@ -6,31 +6,11 @@ using System.Text;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
+using JWT.Class.Dal;
+using JWT.Class.Models.GlobalModels;
 
-namespace JWT.Class
-{   
-    /// <summary>
-    /// Oluşturulan Token Çalındıında Extra Güvenlik Mekanizması İçin Oluşturulmuştur.Tokeni Çalan kişinin IP adresi, tarayıcı bilgisi ve timestamp bilgileri burada kontrol edilir.
-    /// Bilgilerden herhangi biri tutarsız olursa extra yazacaqğınız güvenlik mekanizması kodlarıyla token hırsızlıını durdurabilirsiniz. Tokeni çalan kişi tokeni çalsa bile işlem yapamaz.
-    /// </summary>
-    public class Cls_ClaimUserData
-    {
-        /// <summary>
-        /// Tokeni oluşturan kullanıcının ip adresi.
-        /// </summary>
-        public string IPAddress { get; set; }
-
-        /// <summary>
-        /// Tokeni oluşturan kullanıcnın browser bilgisi
-        /// </summary>
-        public string BrowseName { get; set; }
-
-        /// <summary>
-        /// Tokenin oluşturulmaz zaman damgası
-        /// </summary>
-        public double TimeStamp { get; set; }
-    }
-
+namespace JWT.Class.GlobalClass
+{
 
     /// <summary>
     /// JWT TOKEN MEKANİZMASINI YÖNETEN CLASS YAPISI, Kullanıcılar bu class da bulunan metotlar ile sisteme otantike olur, login işlemleri burada gerçekleşir.
@@ -38,9 +18,10 @@ namespace JWT.Class
     /// </summary>
     public class Cls_Jwt : IJWT
     {
-        private IConfiguration Configuration { get; set; }
+        DatabaseContext db = new DatabaseContext();
 
-      
+        private IConfiguration Configuration { get; set; }
+              
 
         public Cls_Jwt(IConfiguration iConfig)
         {
@@ -75,18 +56,17 @@ namespace JWT.Class
         /// <returns>Token String</returns>
         /// <seealso cref="IJWT"/>
         /// <seealso cref="TokenController.Authenticate"/>
-        public string Authhenticate(string UserName, string Password, ConnectionInfo Connection)
+        public string Authhenticate(string Email, string Password, ConnectionInfo Connection)
         {
             #region KULLANICI VARMI
 
 
-            if (!users.Any(x=> x.Key == UserName && x.Value == Password))
-            {
-                return null;
-            }
+            Mdl_User User = new Mdl_User();
+
+            User = db.User.Where(x => x.Email == Email && x.Password == Password).FirstOrDefault() ?? User; 
 
             #endregion
-                     
+
             #region SECRET KEY
             //Jwt Token 3 bölümden oluşur 
             //1- HEADER     (ALGORITHM & TOKEN TYPE bilgileri bulundurur)
@@ -103,26 +83,42 @@ namespace JWT.Class
             //Kimlik yapısını oluşturuyoruz.
             List<Claim> ClaimListesi = new List<Claim>();
 
-            Claim ClaimA = new Claim(ClaimTypes.Name, UserName);
-
-            Claim ClaimB = new Claim(ClaimTypes.Role, "Admin"); //Veritabanından gelen rolü burada tanımla!
+            Claim ClaimA = new Claim(ClaimTypes.Name, User.Name);
+            Claim ClaimB = new Claim(ClaimTypes.Role, "Admin"); //todo Veritabanından gelen rolü burada tanımla! ileride yapılacak.
+            Claim ClaimC = new Claim(ClaimTypes.Email, User.Email);
 
             ClaimListesi.Add(ClaimA);
             ClaimListesi.Add(ClaimB);
-
-
+            ClaimListesi.Add(ClaimC);
+                      
             #region Daha güvenli bir Claim oluşturmak için aşaıdakileri dahil edebilirsin.
 
+            ///Doğrudan tanımlayamadığım özellikleri claime dolaylı olarak tanımlıyorum!
             Cls_ClaimUserData UserData = new Cls_ClaimUserData();
-            
-            UserData.IPAddress = Connection.RemoteIpAddress.ToString();
-            UserData.BrowseName = "Mozilla";
-            UserData.TimeStamp = Cls_Tools.DateTime_To_Timestamp(DateTime.Now);
 
-            Claim IP = new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(UserData)); //Veritabanından gelen rolü burada tanımla!
+            //Kullanıcı bu sayfa direkt olarak erişseydi bu olacaktı fakat arada başka bir sunucu olduğu için her seferinde o sunucunun ip adresini kayıt edecek ve bir işe yaramayacak.
+            //Bu yüzden kullanıcının ip adresini yine kullanıcı bilgilerinin içinden alıyorum. Kullanıcının ıp adresini alma işlemini aradaki service halledecek ve kullanıcı objesine yazacak!
+            //Bizde objenin içinden ip adresini alacağız.
+            UserData.IPAddress = Connection.RemoteIpAddress.ToString();
+
+            //UserData.IPAddress = User.LastIP;
+
+            UserData.TimeStamp = Cls_Tools.DateTime_To_Timestamp(User.LastLoginTime); //Kullanıcının son giriş yaptığı zaman.  //Kullanıcı direkt olarak bu sunucuya erişmiş olsaydı bu durumda bu kod çalışacaktı.
+            //Bizim arada bir service olduğu için login zamanını alma işlemini ona yaptırıyoruz.
+            
+            //UserData.TimeStamp = Cls_Tools.DateTime_To_Timestamp(User.LastLoginTime); //Kullanıcının son giriş yaptığı zaman.
+            UserData.BrowseName = "Mozilla"; //todo kullanıcı browser adı alıanacak!
+           
+            Claim ClaimD = new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(UserData));
+            Claim ClaimE = new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString());
+
+            ClaimListesi.Add(ClaimA);
+            ClaimListesi.Add(ClaimB);
+            ClaimListesi.Add(ClaimC);
+            ClaimListesi.Add(ClaimD);
+            ClaimListesi.Add(ClaimE);
 
             #endregion
-
 
             #endregion
 
@@ -136,9 +132,7 @@ namespace JWT.Class
 
             //Datetim.Now yerine Datetime.UtcNow kullanmak uluslar arası projelerde daha doğru olacaktır.
             TokenDescriptor.Expires = DateTime.UtcNow.AddHours(1);
-
             
-
             SigningCredentials Credentials = new SigningCredentials(new SymmetricSecurityKey(TokenKey), SecurityAlgorithms.HmacSha256Signature);
             TokenDescriptor.SigningCredentials = Credentials;
 

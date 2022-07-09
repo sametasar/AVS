@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using JWT.Interface;
 using JWT.Class;
-using JWT.Model;
+using JWT.Class.Models.GlobalModels;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
+using JWT.Class.Dal;
 
 namespace JWT.Controllers
 {
@@ -81,6 +82,24 @@ namespace JWT.Controllers
 
         #endregion
 
+        #region GET USER
+
+        [SwaggerOperation(Description = "Test Kullanýcýs bilgilerini döndürür.",
+         Summary = "Test Kullanýcýsý", Tags = new string[] { "Test Kullanýcýsý" })]       
+        [HttpGet]
+        [Description("Yalnýzca test kullanýcýsý bilgilerini döndürür.")]
+        public Mdl_User Get_Users()
+        {
+            Mdl_User Kisi = new Mdl_User();
+            Kisi.Name = "Mesut";
+            Kisi.Password = "1234";
+            Kisi.Email = "mesuthas@hotmail.com";
+            Kisi.Surname = "Has";
+            return Kisi;
+        }
+
+        #endregion
+
         #endregion
 
         #region AUTHENTICATE
@@ -100,10 +119,26 @@ namespace JWT.Controllers
         [HttpGet]
         //[HttpPost(Name = "authenticate")]
         //public IActionResult Authenticate([FromBody] string UserName, string Password)
-        public IActionResult Authenticate(string UserName, string Password)
-        {          
+        public IActionResult Authenticate(string Email, string Password)
+        {
+            #region TEST
+            //DatabaseContext db = new DatabaseContext();
+            //Mdl_User Kullanici = new Mdl_User();
 
-            string token = IJwtAuthenticationManager.Authhenticate(UserName, Password, HttpContext.Connection);
+            //Kullanici.Password = "asar";
+            //Kullanici.Name = "samet";
+            //Kullanici.Email = "sametasar@gmail.com";
+            //Kullanici.Create_Date = DateTime.Now;
+            //Kullanici.LastIP = "127.0.0.1";
+            //Kullanici.LastLoginTime = DateTime.Now;
+            //Kullanici.LastToken = "432823094329048093284";
+
+
+            //db.User.Add(Kullanici);
+            //db.SaveChanges();
+            #endregion
+
+            string token = IJwtAuthenticationManager.Authhenticate(Email, Password, HttpContext.Connection);
 
             if (token == null)
             {
