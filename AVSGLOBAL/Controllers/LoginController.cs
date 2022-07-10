@@ -29,35 +29,32 @@ namespace AVSGLOBAL.Controllers
         {
             return View();
         }
-
-        private async Task<Mdl_User> GetUser(Mdl_User userModel)
-        {
-            //Write your code here to authenticate the user
-            return await _userRepository.GetUser(userModel);
-        }
-
+       
         [AllowAnonymous]
         [Route("login")]
         [HttpGet]
-        public async Task<IActionResult> Login(string UserName,string Password)
+        public async Task<IActionResult> Login(string Email,string Password)
         {
 
             Mdl_User userModel = new Mdl_User();
-            userModel.Name = UserName;
+            userModel.Email = Email;
             userModel.Password = Password;
 
 
-            if (string.IsNullOrEmpty(userModel.Name) || string.IsNullOrEmpty(userModel.Password))
+            if (string.IsNullOrEmpty(userModel.Email) || string.IsNullOrEmpty(userModel.Password))
             {
                 return (RedirectToAction("Error"));
             }
 
             IActionResult response = Unauthorized();
-            Mdl_User validUser = await GetUser(userModel);
+            Mdl_User validUser = await _userRepository.Authenticate(userModel);
 
             if (validUser != null)
             {
-                generatedToken = _tokenService.BuildToken(Cls_Settings.JWTKEY, Cls_Settings.JWTISSUER, validUser, HttpContext.Connection);
+                //Aşağıdaki metot bu client uygulamasının kendi backendi ile başka bir web servise bağımlı olmadan Token oluşturmasını sağlar. Bizim şu anki senaryomuzda bizim için gerekli tokeni MainWenService oluşturduğu için bunu iptal ediyor ve hemen altındaki metodu kullanarak oluşturuyorum.
+                //generatedToken = _tokenService.BuildToken(validUser, HttpContext.Connection);
+
+                generatedToken =  _tokenService.BuildToken(validUser, HttpContext.Connection);
 
                 if (generatedToken != null)
                 {

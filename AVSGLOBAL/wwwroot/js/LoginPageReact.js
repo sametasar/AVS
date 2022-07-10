@@ -1,15 +1,15 @@
 
-// /**
-//  Bu class Login sayfasında bulunan kontrollerdeki yazıları tek noktadan yönetmemizi sağlar.
-//  @memberof Cls_Login
-//  @property {string}   Title       login sayfasının başlık bilgisini tutar.
-//  @property {string}   UserName    Login sayfasında kullanıcı adı kontrolüne girilen değerleri tutar.
-//  @property {string}   Password    Login sayfasında Password kontrolüne girilen değeri tutar.
-//  @property {string}   Remember    Beni hatırla bilgisini barındırır.
-//  @property {string}   Button      Login buton bilgilerini üzerinde tutar.
-//  @property {string}   Register    Register bilgisini tutar.
-//  @property {string}   Forgot      Şifremi unuttum bilgisini üzerinde tutar.
-//  */
+ /**
+  Bu class Login sayfasında bulunan kontrollerdeki yazıları tek noktadan yönetmemizi sağlar.
+//   @memberof Cls_Login
+//   @property {string}   Title       login sayfasının başlık bilgisini tutar.
+//   @property {string}   UserName    Login sayfasında kullanıcı adı kontrolüne girilen değerleri tutar.
+//   @property {string}   Password    Login sayfasında Password kontrolüne girilen değeri tutar.
+//   @property {string}   Remember    Beni hatırla bilgisini barındırır.
+//   @property {string}   Button      Login buton bilgilerini üzerinde tutar.
+//   @property {string}   Register    Register bilgisini tutar.
+//   @property {string}   Forgot      Şifremi unuttum bilgisini üzerinde tutar.
+  */
 class Cls_Login {
 
     constructor(Title, UserName, Password, Remember,Button,Register,Forgot) {
@@ -51,7 +51,7 @@ class LoginTitle extends React.Component {
     }
 }
 
-///Kullanıcı adının girileceği UserName komponenti. 
+///Kullanıcı adının girileceği UserName komponenti.
 class UserName extends React.Component {
 
     constructor() {
@@ -65,13 +65,13 @@ class UserName extends React.Component {
      * TextChange eventi UserName textbox ı değişimini yakalayan eventdir. "onChange={() => this.TextChange(event)}" ile çağrılır.
      * @memberof TextChange
      * @param event Event text kutusunun değişim anındakidurumunu gönderir. İçinde ilgili textboxın veerilerine ulaşabilirsiniz.
-     * 
+     *
      * @return UserName Textbox componentinin constructor içinde bulunan  state durum bilgilerindeki text değerini günceller.
      */
-    TextChange(event) {        
+    TextChange(event) {
         this.setState((prevState, props) => {
-           
-            if (event != undefined) {                
+
+            if (event != undefined) {
                 LoginObject.UserName = event.target.value;
                 return { text: event.target.value };
             }
@@ -101,14 +101,14 @@ class Password extends React.Component {
         };
     }
 
-    TextChange(event) {        
+    TextChange(event) {
         this.setState((prevState, props) => {
 
             if (event != undefined) {
                 LoginObject.Password = event.target.value;
                 return { text: event.target.value };
             }
-            
+
         });
     }
 
@@ -146,8 +146,8 @@ class Remember extends React.Component {
 
 ///Login butonu kontrolü için geliştirilmiştir.Buton tıklandığında LoginTest Metodu devreye girer. LoginTest Metodu içinde axios ile /login web servisi tetiklenir.
 class LoginButton extends React.Component {
-        
-    
+
+
     LoginTest() {
 
         //axios.get("/Login/LoginTest?UserName=" + LoginObject.UserName + "&Password=" + LoginObject.Password + "")
@@ -159,7 +159,7 @@ class LoginButton extends React.Component {
         //        console.log(error);
         //    });
 
-        axios.get("/login?UserName=" + LoginObject.UserName + "&Password=" + LoginObject.Password + "")
+        axios.get("/login?Email=" + LoginObject.UserName + "&Password=" + LoginObject.Password + "")
             .then(function (response) {
                 console.log(response.data);
                 window.location.href = "/MainWindow";
@@ -170,7 +170,7 @@ class LoginButton extends React.Component {
 
             //Post için gerekli request örnei, daha fazla örnek için dökümantasyona bakabilirsin!
             //axios.post('/login', {
-            //    UserName: this.username,
+            //    Email: this.username,
             //    Password: this.password
             // })
             // .then(function (response) {

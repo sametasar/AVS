@@ -37,5 +37,20 @@
         /// Default jwt key bilgisi. Jwtnin oluşturacağı tokenı burada belirtilen anahtar ile şifrelenecektir.H256sha formatında şifrelenecek bilgi şifrelenmeden önce byte arraye dönüştürülmelidir.
         /// </summary>
         public static string JWTKEY { get; set; }
+
+        /// <summary>
+        /// Yayıncı hak sahibi, firma bilgisi vb.
+        /// </summary>
+        public static string JWTISSUER { get; set; }
+
+        /// <summary>
+        /// Kapsama alanı
+        /// </summary>
+        public static string JWTAUDIENCE { get; set; }
+       
+        /// <summary>
+        /// Oluşturulan Jwt tokenin dakika olarak sistemde geçerli olacağı süre.
+        /// </summary>
+        public static double TokenExpireMinute { get; set; }
     }
 }

@@ -21,7 +21,48 @@ namespace JWT.Class.GlobalClass
         DatabaseContext db = new DatabaseContext();
 
         private IConfiguration Configuration { get; set; }
-              
+
+        /// <summary>
+        /// Bu metodun yapılmasının amacı token değerini bir user objesinin Token propertysine veriyorum.
+        /// Fakat user objesini taşıma esnasında json a çevirdiğimde içinde bulunan tone karakterleri süslü parantezler ,tek tırnaklar, virgüller , büyük parantezler ve json içinde olabilecek diğer karakterler
+        /// Json ı tekrar objeye çevirmemi engelliyor. Bu yüzden özel karakterler ile bu token içinde olabilecek diğer özel karakterleri
+        /// değiştiriyorum bu karakterleri tekrar eski haline çevirerek tokenımı doğruluyorum.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public string TokenCrypt(string token)
+        {
+            //json içinde bulunan karakter listesi
+            //"{},:'\"[]()"
+            //  { = ȶ
+            //  } = ȸ
+            //  , = Ⱥ
+            //  : = Ƚ
+            //  ' = Ʉ
+            // \" = Ɋ
+            //  [ = Ɏ
+            //  ] = ɓ
+            //  ( = ɗ
+            //  ) = ɷ
+
+            token = token.Replace("{", "ȶ").Replace("}", "ȸ").Replace(",", "Ⱥ").Replace(":", "Ƚ").Replace("'", "Ʉ").Replace("\"", "Ɋ").Replace("[", "Ɏ").Replace("]", "ɓ").Replace("(", "ɗ").Replace(")", "ɷ");
+
+            return token;
+        }
+
+
+        /// <summary>
+        /// Crypt edilen Tokenimi tekrar eski haline getirmek için kullanıyorum.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public string TokenDeCrypt(string token)
+        {
+            token = token.Replace("ȶ", "{").Replace("ȸ", "}").Replace("Ⱥ", ",").Replace("Ƚ", ":").Replace("Ʉ", "'").Replace("Ɋ", "\"").Replace("Ɏ", "[").Replace("ɓ", "]").Replace("ɗ", "(").Replace("ɷ", ")");
+
+            return token;
+        }
+
 
         public Cls_Jwt(IConfiguration iConfig)
         {
@@ -30,16 +71,7 @@ namespace JWT.Class.GlobalClass
             //Configuration.GetValue<string>("Settings:JWTKEY")
         }
 
-        #region TEST KULLANICILARI
-
-        private readonly IDictionary<string, string> users = new Dictionary<string, string>
-        {
-            {"user1","pwd1" },
-            {"user2","pwd2" }
-        };
-
-        #endregion
-
+       
         #region public string Authhenticate(string UserName, string Password)
 
         /// <summary>
@@ -56,7 +88,7 @@ namespace JWT.Class.GlobalClass
         /// <returns>Token String</returns>
         /// <seealso cref="IJWT"/>
         /// <seealso cref="TokenController.Authenticate"/>
-        public string Authhenticate(string Email, string Password, ConnectionInfo Connection)
+        public Mdl_User Authhenticate(string Email, string Password, ConnectionInfo Connection)
         {
             #region KULLANICI VARMI
 
@@ -111,16 +143,15 @@ namespace JWT.Class.GlobalClass
            
             Claim ClaimD = new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(UserData));
             Claim ClaimE = new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString());
-
-            ClaimListesi.Add(ClaimA);
-            ClaimListesi.Add(ClaimB);
-            ClaimListesi.Add(ClaimC);
+                     
             ClaimListesi.Add(ClaimD);
             ClaimListesi.Add(ClaimE);
 
             #endregion
 
             #endregion
+
+            /*
 
             #region TOKEN ÖZELLİKLERİ
 
@@ -144,9 +175,24 @@ namespace JWT.Class.GlobalClass
 
             SecurityToken Token = TokenHandler.CreateToken(TokenDescriptor);
 
-            return TokenHandler.WriteToken(Token);
+          
+           User.LastToken = TokenHandler.WriteToken(Token);
+
+            return User;
 
             #endregion
+
+            */
+
+            SymmetricSecurityKey SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Cls_Settings.JWTKEY));
+            SigningCredentials Credentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            JwtSecurityToken TokenDescriptor = new JwtSecurityToken(Cls_Settings.JWTISSUER, Cls_Settings.JWTISSUER, ClaimListesi,
+            expires: DateTime.Now.AddMinutes(Cls_Settings.TokenExpireMinute), signingCredentials: Credentials);
+            User.TokenDescriptor = TokenDescriptor;
+            User.LastToken = TokenCrypt(new JwtSecurityTokenHandler().WriteToken(TokenDescriptor));
+            return User;
+
+
         }
 
         #endregion

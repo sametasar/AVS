@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AVSGLOBAL.Class.Models
 {
@@ -53,6 +54,16 @@ namespace AVSGLOBAL.Class.Models
         public string? LastToken { get; set; }
 
         /// <summary>
+        /// Bu property api den gelen Mdl_User içindeki JwtToken oluşturucu ayarlarıdır. Bu ayarların aynısıyla token üretildiğinde mevcut sunucu ile birebir aynı token üretilmiş olur.
+        /// Bu sayede tek bir noktada login olan kullanıcı diğer uygulamlarada geçiş yapabilir. Tek login üzerinden bir çok sistemi birbirine bağlama için yapılmıştır.Yada diğer bir değişle
+        /// Tek bir token ile hem web service hemde client ın çalışmasını sağlamak için tasarlanmıştır. Cls_TokenService.BuildMainServiceToken bu token ayarları ile sadece token oluşturması gerekir.
+        /// Notmapped yapılmasının sebebi ise bu token bilgilerinin veritabanına yazılmamasıdır.
+        /// </summary>
+        /// <value></value>        
+        [NotMapped]
+        public JwtSecurityToken TokenDescriptor { get; set; }
+
+        /// <summary>
         /// Login olan kullanıcının sisteme en son hangi ip adresinden giriş yaptığı bilgisi.
         /// </summary>
         public string LastIP { get; set; }
@@ -76,4 +87,5 @@ namespace AVSGLOBAL.Class.Models
             throw new NotImplementedException();
         }
     }
+
 }

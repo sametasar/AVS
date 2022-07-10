@@ -47,60 +47,7 @@ namespace JWT.Controllers
             _logger = logger;
             this.IJwtAuthenticationManager = IJwtAuthenticationManager;
         }
-        #endregion
-
-        #region METHODS
-
-        #region HAVA DURUMU
-
-        [SwaggerOperation(Description = "Bulunduðunuz lokasyondaki 1 haftalýk hava durumu bilgilerini getirir.", Summary = "Hava Durumu", Tags = new string[] { "Hava Durumu" })]
-        [AllowAnonymous]
-        [HttpGet]
-        [Description("Bulunduðunuz lokasyondaki 1 haftalýk hava durumu bilgilerini getirir.")]
-        public Mdl_WeatherObject GetWeather(string city)
-        {
-            Mdl_WeatherObject Weather = new Mdl_WeatherObject();
-            Weather = Weather.GetWeather(city);            
-            return Weather;
-        }
-
-        #endregion
-
-        #region DÖVÝZ KURLARI
-
-      
-        [SwaggerOperation(Description = "Türkiye cumhuriyeti merkez bankasýndan en güncel döviz kur bilgilerini getirir.",
-         Summary = "Döviz Kurlarý", Tags = new string[] { "Döviz Kurlarý" })] 
-        [AllowAnonymous]
-        [HttpGet]
-        [Description("Türkiye cumhuriyeti merkez bankasýndan en güncel döviz kur bilgilerini getirir.")]
-        public List<Mdl_Currency> GetDataTableAllCurrenciesTodaysExchangeRates()
-        {
-             
-            return CurrenciesExchange.GetDataTableAllCurrenciesTodaysExchangeRates();
-        }
-
-        #endregion
-
-        #region GET USER
-
-        [SwaggerOperation(Description = "Test Kullanýcýs bilgilerini döndürür.",
-         Summary = "Test Kullanýcýsý", Tags = new string[] { "Test Kullanýcýsý" })]       
-        [HttpGet]
-        [Description("Yalnýzca test kullanýcýsý bilgilerini döndürür.")]
-        public Mdl_User Get_Users()
-        {
-            Mdl_User Kisi = new Mdl_User();
-            Kisi.Name = "Mesut";
-            Kisi.Password = "1234";
-            Kisi.Email = "mesuthas@hotmail.com";
-            Kisi.Surname = "Has";
-            return Kisi;
-        }
-
-        #endregion
-
-        #endregion
+        #endregion       
 
         #region AUTHENTICATE
 
@@ -121,31 +68,14 @@ namespace JWT.Controllers
         //public IActionResult Authenticate([FromBody] string UserName, string Password)
         public IActionResult Authenticate(string Email, string Password)
         {
-            #region TEST
-            //DatabaseContext db = new DatabaseContext();
-            //Mdl_User Kullanici = new Mdl_User();
+            Mdl_User User = IJwtAuthenticationManager.Authhenticate(Email, Password, HttpContext.Connection);
 
-            //Kullanici.Password = "asar";
-            //Kullanici.Name = "samet";
-            //Kullanici.Email = "sametasar@gmail.com";
-            //Kullanici.Create_Date = DateTime.Now;
-            //Kullanici.LastIP = "127.0.0.1";
-            //Kullanici.LastLoginTime = DateTime.Now;
-            //Kullanici.LastToken = "432823094329048093284";
-
-
-            //db.User.Add(Kullanici);
-            //db.SaveChanges();
-            #endregion
-
-            string token = IJwtAuthenticationManager.Authhenticate(Email, Password, HttpContext.Connection);
-
-            if (token == null)
+            if (User == null)
             {
                 return Unauthorized();
             }
 
-            return Ok(token);
+            return Ok(User);
         }
 
         #endregion

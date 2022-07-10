@@ -22,7 +22,7 @@ const app = Vue.createApp({
     methods: {
         LoginControl() {           
 
-            axios.get("/login?UserName=" + this.username + "&Password=" + this.password + "")
+            axios.get("/login?Email=" + this.username + "&Password=" + this.password + "")
                 .then(function (response) {
                     console.log(response.data);
                     window.location.href = "/MainWindow";
@@ -34,7 +34,7 @@ const app = Vue.createApp({
             
             //Post için gerekli request örnei, daha fazla örnek için dökümantasyona bakabilirsin!
             //axios.post('/login', {
-            //    UserName: this.username,
+            //    Email: this.username,
             //    Password: this.password
             // })
             // .then(function (response) {

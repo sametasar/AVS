@@ -39,8 +39,7 @@ namespace AVSGLOBAL.Controllers
                 return (RedirectToAction("Index"));
             }
 
-            if (!_tokenService.IsTokenValid(Cls_Settings.JWTKEY,
-                Cls_Settings.JWTISSUER, token))
+            if (!_tokenService.IsTokenValid(token))
             {
                 return (RedirectToAction("Index"));
             }

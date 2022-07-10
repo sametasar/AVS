@@ -14,19 +14,8 @@ using System.Dynamic;
 namespace AVSGLOBAL.Class.Global
 {
     public class Cls_User : IUser
-    {
-        DatabaseContext db = new DatabaseContext();
-
-        //private readonly List<Mdl_UserDTO> users = new List<Mdl_UserDTO>();
-        //public Cls_UserRepository()
-        //{
-        //    users.Add(new Mdl_UserDTO { UserName = "joydipkanjilal", Password = "joydip123", Role = "manager", Email="pantelga@gmail.com" });
-        //    users.Add(new Mdl_UserDTO { UserName = "michaelsanders", Password = "michael321", Role = "developer", Email = "pantelga@gmail.com" });
-        //    users.Add(new Mdl_UserDTO { UserName = "stephensmith", Password = "stephen123", Role = "tester", Email = "pantelga@gmail.com" });
-        //    users.Add(new Mdl_UserDTO { UserName = "rodpaddock", Password = "rod123", Role = "admin", Email = "pantelga@gmail.com" });
-        //    users.Add(new Mdl_UserDTO { UserName = "rexwills", Password = "rex321", Role = "admin", Email = "pantelga@gmail.com" });
-        //}
-        public async Task<Mdl_User> GetUser(Mdl_User userModel)
+    {        
+        public async Task<Mdl_User> GetUser(string UserID)
         {   
 
             /* #region  kullanıcıyı veritabanından kontrol etmek için! */
@@ -42,64 +31,82 @@ namespace AVSGLOBAL.Class.Global
             //     return new Mdl_User();
             // }
             /* #endregion */
-        
-            string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJzYW1ldCIsInNhbWV0Il0sInJvbGUiOlsiQWRtaW4iLCJBZG1pbiJdLCJlbWFpbCI6WyJzYW1ldGFzYXJAZ21haWwuY29tIiwic2FtZXRhc2FyQGdtYWlsLmNvbSJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoie1wiSVBBZGRyZXNzXCI6XCI6OjFcIixcIkJyb3dzZU5hbWVcIjpcIk1vemlsbGFcIixcIlRpbWVTdGFtcFwiOjE2NTczMzk3OTguNzcxNjgyNX0iLCJuYW1laWQiOiJmMzViMjQzNi1hYTdjLTRhZDAtYjI1NC01MTYzODU4YWUxYmEiLCJuYmYiOjE2NTczODAwODMsImV4cCI6MTY1NzM4MzY4MywiaWF0IjoxNjU3MzgwMDgzfQ.FSmgX-jd362DnsLUU2v08BLT-RJ7ISliNsv2pXZbMrM";
-            string URI = Cls_Settings.MAIN_WEB_SERVICE;
-            string myParameters = "";
+       
+       
+            Cls_WebRequestOption options = new Cls_WebRequestOption();
+            options.ActionType = Enm_ActionTypes.Get;
+            options.ApiUrl = "/user/";
+            options.MethodName = "Get_User"; 
+          
+            Cls_KeyValue KeyValue1 = new Cls_KeyValue();
+            KeyValue1.Key = "ID";
+            KeyValue1.Value = UserID;
+                      
+            List<Cls_KeyValue> ParametreListem = new List<Cls_KeyValue>();
+            ParametreListem.Add(KeyValue1);
+          
+            options.Parameters =  ParametreListem;
 
+            options.Url = Cls_Settings.MAIN_WEB_SERVICE;
 
+            string json = await Cls_WebRequest.SendRequest(options);
 
-            // var request = new RestRequest(Method.POST);
-            // request.Headers.Add("Content-Type", "application/json");
+            Mdl_User user = JsonConvert.DeserializeObject<Mdl_User>(json);
 
-           // Initialization.  
-            string responseObj = string.Empty;  
-            // HTTP GET.  
-            using (var client = new HttpClient())  
-            { 
-            
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);                 
-                client.BaseAddress = new Uri(Cls_Settings.MAIN_WEB_SERVICE);                 
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));                  
-                HttpResponseMessage response = new HttpResponseMessage();                 
-                response = await client.GetAsync("/api/Get_Users").ConfigureAwait(false);  
-                // Verification  
-                if (response.IsSuccessStatusCode)  
-                {  
-                        Mdl_User t = null;
-                        var str = await response.Content.ReadAsStringAsync();
-                        t = JsonConvert.DeserializeObject<Mdl_User>(str);
-                }  
-            }
-
-            return new Mdl_User();
-
-
-            // try
-            //     {                
-            //         Console.Write("Parameters : " + myParameters + "\n");
-            //         using (WebClient wc = new WebClient())
-            //         {
-            //             wc.Headers[HttpRequestHeader.Authorization] = "Bearer " + token;
-            //             wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            //             wc.Headers[HttpRequestHeader.Accept] = "application/json";
-            //             string responsebody = wc.UploadString(Cls_Settings.MAIN_WEB_SERVICE,"/api/Get_Users");
-            //             //Console.Write("Output : " + responsebody + " ");
-            //             dynamic dynObj = JsonConvert.DeserializeObject(responsebody);
-
-            //             string json = responsebody;
-
-            //             return new Mdl_User();
-            //         }
-
-
-            //     }
-            //     catch (WebException exx)
-            //     {
-            //         string Hata = exx.ToString();
-            //         return new Mdl_User();
-            //     }  
-        
+            return user;        
         }
+
+
+        public async Task<Mdl_User> Authenticate(Mdl_User userModel)
+        {   
+
+            /* #region  kullanıcıyı veritabanından kontrol etmek için! */
+            // List<Mdl_User> UserList = new List<Mdl_User>();
+            // UserList = db.User.Where(x => x.Name == userModel.Name && x.Password == userModel.Password).ToList<Mdl_User>();
+
+            // if (UserList.Count > 0)
+            // {
+            //     return UserList[0];
+            // }
+            // else
+            // {
+            //     return new Mdl_User();
+            // }
+            /* #endregion */
+       
+       
+            Cls_WebRequestOption options = new Cls_WebRequestOption();
+            options.ActionType = Enm_ActionTypes.Get;
+            options.ApiUrl = "/api/";
+            options.MethodName = "Authenticate"; 
+          
+            Cls_KeyValue KeyValue1 = new Cls_KeyValue();
+            KeyValue1.Key = "Email";
+            KeyValue1.Value = userModel.Email;
+
+            Cls_KeyValue KeyValue2 = new Cls_KeyValue();
+            KeyValue2.Key = "Password";
+            KeyValue2.Value = userModel.Password;
+            
+            List<Cls_KeyValue> ParametreListem = new List<Cls_KeyValue>();
+            ParametreListem.Add(KeyValue1);
+            ParametreListem.Add(KeyValue2);
+
+            options.Parameters =  ParametreListem;
+
+            options.Url = Cls_Settings.MAIN_WEB_SERVICE;
+
+            string json = await Cls_WebRequest.SendRequest(options);
+
+            Mdl_User user = JsonConvert.DeserializeObject<Mdl_User>(json);
+
+            //user gel fakat tokenim olması gerektiği değerde değil onu tekrar Decrypt edeceğim ve olması gereken değerde olacak!
+            //Taşıma işlemlerinde json dönüşümlerinde token içindeki json karakterleri json dönüşümlerini patlatıyor!
+
+            user.LastToken =  new Cls_TokenService().TokenDeCrypt(user.LastToken);
+
+            return user;        
+        }
+
     }
 }

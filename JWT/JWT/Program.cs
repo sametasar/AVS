@@ -24,8 +24,14 @@ Cls_Settings.DefaultEmail = builder.Configuration["Settings:DefaultEmail"];
 Cls_Settings.DefaultEmailPassword = builder.Configuration["Settings:DefaultEmailPassword"];
 Cls_Settings.SMTPPort = builder.Configuration["Settings:SMTPPort"];
 Cls_Settings.JWTKEY = builder.Configuration["Settings:JWTKEY"];
+Cls_Settings.JWTISSUER = builder.Configuration["Settings:ISSUER"];
+Cls_Settings.JWTAUDIENCE = builder.Configuration["Settings:AUDIENCE"];
 
-
+/// <summary>
+/// Web uygulamamýzda token ne kadar süre devrede kalacak bilgisi!
+/// </summary>
+/// <returns></returns>
+Cls_Settings.TokenExpireMinute = Convert.ToDouble(builder.Configuration["Settings:TokenExpireMinute"]);
 
 //Cls_Jwt
 builder.Services.AddAuthentication(x => {

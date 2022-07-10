@@ -38,10 +38,28 @@
         /// </summary>
         public static string JWTKEY { get; set; }
 
+        /// <summary>
+        ///  Yayıncı hak sahibi, firma bilgisi vb.
+        /// </summary>
+        /// <value></value>
         public static string JWTISSUER {get; set;}
 
+        /// <summary>
+        /// Kapsama alanı
+        /// </summary>
+        /// <value></value>
         public static string JWTAUDIENCE { get; set; }
 
+        /// <summary>
+        /// Bu  client uygulamasının çalıştığı bir web servisi varsa web servisin adresi burada belirtilir. Web servis adresinin sonuna "/" yazmayın!
+        /// </summary>
+        /// <value></value>
         public static string MAIN_WEB_SERVICE { get; set; }
+
+        /// <summary>
+        /// Oluşturulan Jwt tokenin dakika olarak sistemde geçerli olacağı süre.
+        /// </summary>
+        /// <value></value>
+        public static double TokenExpireMinute { get; set; }
     }
 }

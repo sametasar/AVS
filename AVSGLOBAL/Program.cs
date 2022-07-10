@@ -28,6 +28,12 @@ Cls_Settings.JWTAUDIENCE = builder.Configuration["Settings:AUDIENCE"];
 //Ana servisin ip adresi bu sayede yalnızca bizim tarafımızdan bilinecek istenildiği durumda ip trafiği değiştirilebilinecek.
 Cls_Settings.MAIN_WEB_SERVICE = builder.Configuration["Settings:MAIN_WEB_SERVICE"];
 
+/// <summary>
+/// Web uygulamamızda token ne kadar süre devrede kalacak bilgisi!
+/// </summary>
+/// <returns></returns>
+Cls_Settings.TokenExpireMinute =Convert.ToDouble(builder.Configuration["Settings:TokenExpireMinute"]);
+
 builder.Services.AddAuthentication(auth =>
 {
     auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

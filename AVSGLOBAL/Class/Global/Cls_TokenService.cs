@@ -11,9 +11,57 @@ namespace AVSGLOBAL.Class.Global
 {
     public class Cls_TokenService : ITokenService
     {
-        private const double EXPIRY_DURATION_MINUTES = 30;
 
-        public string BuildToken(string key, string issuer, Mdl_User user, ConnectionInfo Connection)
+         /// <summary>
+        /// Bu metodun yapılmasının amacı token değerini bir user objesinin Token propertysine veriyorum.
+        /// Fakat user objesini taşıma esnasında json a çevirdiğimde içinde bulunan tone karakterleri süslü parantezler ,tek tırnaklar, virgüller , büyük parantezler ve json içinde olabilecek diğer karakterler
+        /// Json ı tekrar objeye çevirmemi engelliyor. Bu yüzden özel karakterler ile bu token içinde olabilecek diğer özel karakterleri
+        /// değiştiriyorum bu karakterleri tekrar eski haline çevirerek tokenımı doğruluyorum.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public string TokenCrypt(string token)
+        {
+            //json içinde bulunan karakter listesi
+            //"{},:'\"[]()"
+            //  { = ȶ
+            //  } = ȸ
+            //  , = Ⱥ
+            //  : = Ƚ
+            //  ' = Ʉ
+            // \" = Ɋ
+            //  [ = Ɏ
+            //  ] = ɓ
+            //  ( = ɗ
+            //  ) = ɷ
+
+            token = token.Replace("{", "ȶ").Replace("}", "ȸ").Replace(",", "Ⱥ").Replace(":", "Ƚ").Replace("'", "Ʉ").Replace("\"", "Ɋ").Replace("[", "Ɏ").Replace("]", "ɓ").Replace("(", "ɗ").Replace(")", "ɷ");
+
+            return token;
+        }
+
+
+        /// <summary>
+        /// Crypt edilen Tokenimi tekrar eski haline getirmek için kullanıyorum.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public string TokenDeCrypt(string token)
+        {
+            token = token.Replace("ȶ", "{").Replace("ȸ", "}").Replace("Ⱥ", ",").Replace("Ƚ", ":").Replace("Ʉ", "'").Replace("Ɋ", "\"").Replace("Ɏ", "[").Replace("ɓ", "]").Replace("ɗ", "(").Replace("ɷ", ")");
+
+            return token;
+        }
+        
+        /// <summary>
+        /// Yeni bir JWT Token oluşturmak üzere geliştirilmiştir.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="issuer"></param>
+        /// <param name="user"></param>
+        /// <param name="Connection"></param>
+        /// <returns></returns>
+        public string BuildToken(Mdl_User user, ConnectionInfo Connection)
         {
 
             #region OTANTİKE OLAN KULLANICININ KİMLİK KARTI YAPILANDIRILMASI - CLAIM OLUŞTURULUYOR
@@ -41,12 +89,28 @@ namespace AVSGLOBAL.Class.Global
 
             #endregion
 
-            SymmetricSecurityKey SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+
+            #region Token Oluşturma Yöntem1
+
+            SymmetricSecurityKey SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Cls_Settings.JWTKEY));
             SigningCredentials Credentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            JwtSecurityToken TokenDescriptor = new JwtSecurityToken(Cls_Settings.JWTISSUER, Cls_Settings.JWTISSUER, ClaimListesi,
+            expires: DateTime.Now.AddMinutes(Cls_Settings.TokenExpireMinute), signingCredentials: Credentials);          
+            //Tokeni Şifreliyorum yada diğer bir değişle filtreliyorum Obje İçinde Taşırken json dönüşümlerinde patlıyor, patlamaması için json karakterlerini değiştiriyorum DeCrypt ederek eski haline getirebilirsin!
+            return TokenCrypt(new JwtSecurityTokenHandler().WriteToken(TokenDescriptor));
 
-            JwtSecurityToken TokenDescriptor = new JwtSecurityToken(issuer, issuer, ClaimListesi,
-            expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: Credentials);
+            #endregion          
 
+        }
+
+
+        /// <summary>
+        /// Main web serviceden gelen token ayarlarını tokena dönüştüren metot.
+        /// </summary>
+        /// <param name="TokenDescriptor"></param>
+        /// <returns></returns>
+        public string BuildMainServiceToken(JwtSecurityToken TokenDescriptor)
+        {
             return new JwtSecurityTokenHandler().WriteToken(TokenDescriptor);
         }
 
@@ -62,9 +126,9 @@ namespace AVSGLOBAL.Class.Global
 
         //    return new JwtSecurityTokenHandler().WriteToken(token);
         //}
-        public bool IsTokenValid(string key, string issuer, string token)
+        public bool IsTokenValid(string token)
         {
-            var mySecret = Encoding.ASCII.GetBytes(key);
+            var mySecret = Encoding.ASCII.GetBytes(Cls_Settings.JWTKEY);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -75,8 +139,8 @@ namespace AVSGLOBAL.Class.Global
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = issuer,
-                    ValidAudience = issuer,
+                    ValidIssuer = Cls_Settings.JWTISSUER,
+                    ValidAudience = Cls_Settings.JWTISSUER,
                     IssuerSigningKey = mySecurityKey,
                 }, out SecurityToken validatedToken);
             }
