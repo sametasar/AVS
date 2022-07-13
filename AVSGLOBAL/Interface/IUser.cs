@@ -1,4 +1,4 @@
-﻿using AVSGLOBAL.Class.Models;
+﻿using AVSGLOBAL.Models.GlobalModel;
 
 namespace AVSGLOBAL.Interface
 {

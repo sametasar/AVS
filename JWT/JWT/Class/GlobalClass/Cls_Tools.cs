@@ -3,6 +3,12 @@ using System.Reflection;
 using System.Xml;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
+using Microsoft.Data.Sqlite;
+
+
 
 namespace JWT.Class.GlobalClass
 {
@@ -48,27 +54,43 @@ namespace JWT.Class.GlobalClass
         }
 
 
-        public static string DefaultConnectionString()
+        public static string DefaultSqlServerConnectionString()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.UserID = "sa";
-            // builder.Password = "test";
-            // builder.InitialCatalog = "AVSCAT";
-            // builder.DataSource = ".";
-            builder.Password = "test";
-            builder.InitialCatalog = "AVSCATERING";
-            builder.DataSource = ".";
+            builder.UserID = Cls_DefaultMsSql.UserName;           
+            builder.Password = Cls_DefaultMsSql.Password;
+            builder.InitialCatalog = Cls_DefaultMsSql.Database;
+            builder.DataSource = Cls_DefaultMsSql.Server;
             builder.PersistSecurityInfo = true;
             builder.TrustServerCertificate = true;
-
-
-            //SqlConnection baglan = new SqlConnection(builder.ConnectionString);
-
-            //baglan.Open();
-            //ConnectionStatus = true;
-            //baglan.Close();
-
             return builder.ConnectionString;
+        }
+
+
+        public static string DefaultMySqlConnectionString()
+        {
+            throw new NotImplementedException();
+
+            //MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder();
+            //builder.UserID = Cls_DefaultMsSql.UserName;
+            //builder.Password = Cls_DefaultMsSql.Password;
+            //builder.Database = Cls_DefaultMsSql.Database;
+            //builder.Server = Cls_DefaultMsSql.Server; 
+            //return builder.ConnectionString;
+        }
+
+
+        public static string DefaultSqliteConnectionString()
+        {
+            SqliteConnectionStringBuilder d = new SqliteConnectionStringBuilder();
+            d.DataSource = System.IO.Directory.GetCurrentDirectory() + Cls_DefaultSqlLite.Directory + Cls_DefaultSqlLite.DataSource;
+            d.DefaultTimeout = Cls_DefaultSqlLite.DefaultTimeout;
+            if (Cls_DefaultSqlLite.Password != null && Cls_DefaultSqlLite.Password != "")
+            {
+                d.Password = Cls_DefaultSqlLite.Password;
+            }
+
+            return d.ConnectionString;
         }
 
         #region Timestamp Zaman Damgaları
@@ -98,8 +120,198 @@ namespace JWT.Class.GlobalClass
         }
 
         #endregion
-               
 
+        #region public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
+        /// <summary>
+        /// Aes formatında şifreleme yapar, Şifre metodu ilk parametresinde aldığı string i byte a dönüştürür. ikinci değer ise şifredir oda byte a dönüşür ve şifreleme işlemi Aes algoritmasına göre yapılır.
+        /// </summary>
+        /// <param name="bytesToBeEncrypted"></param>
+        /// <param name="passwordBytes"></param>
+        /// <returns>byte[]</returns>
+        /// <seealso cref="Cls_Password.Crypt(string, string)"/>
+        public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
+        {
+            byte[] encryptedBytes = null;
+
+            // Set your salt here, change it to meet your flavor:
+            // The salt bytes must be at least 8 bytes.
+            byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (RijndaelManaged AES = new RijndaelManaged())
+                {
+                    AES.KeySize = 256;
+                    AES.BlockSize = 128;
+
+                    var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
+                    AES.Key = key.GetBytes(AES.KeySize / 8);
+                    AES.IV = key.GetBytes(AES.BlockSize / 8);
+
+                    AES.Mode = CipherMode.CBC;
+
+                    using (var cs = new CryptoStream(ms, AES.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(bytesToBeEncrypted, 0, bytesToBeEncrypted.Length);
+                        cs.Close();
+                    }
+                    encryptedBytes = ms.ToArray();
+                }
+            }
+
+            return encryptedBytes;
+        }
+        #endregion
+
+        #region public static byte[] AES_Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
+        /// <summary>
+        /// Aes formatında şifre çözer, Çöz metodu ilk parametresinde aldığı string i byte a dönüştürür. ikinci değer ise şifredir oda byte a dönüşür ve şifreleme işlemi Aes algoritmasına göre yapılır.
+        /// </summary>
+        /// <param name="bytesToBeDecrypted"></param>
+        /// <param name="passwordBytes"></param>
+        /// <returns>byte[]</returns>
+        /// <seealso cref="Cls_Password.Encrypt(string, string)"/>
+        public static byte[] AES_Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
+        {
+            byte[] decryptedBytes = null;
+
+            // Set your salt here, change it to meet your flavor:
+            // The salt bytes must be at least 8 bytes.
+            byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (RijndaelManaged AES = new RijndaelManaged())
+                {
+                    AES.KeySize = 256;
+                    AES.BlockSize = 128;
+
+                    var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
+                    AES.Key = key.GetBytes(AES.KeySize / 8);
+                    AES.IV = key.GetBytes(AES.BlockSize / 8);
+
+                    AES.Mode = CipherMode.CBC;
+
+                    using (var cs = new CryptoStream(ms, AES.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(bytesToBeDecrypted, 0, bytesToBeDecrypted.Length);
+                        cs.Close();
+                    }
+                    decryptedBytes = ms.ToArray();
+                }
+            }
+
+            return decryptedBytes;
+        }
+        #endregion
+
+        #region public static string EnCrypt(string Value, string Key)
+        /// <summary>
+        /// SMT algoritması ile şifreleme yapar İlk parametre şifrelenecek kelime, ikinci parametre ise şifrenin anahtarıdır.
+        /// </summary>
+        /// <param name="Value">Şifrelenecek Kelime</param>
+        /// <param name="Key">Şifreleme Anahtarı</param>
+        /// <returns>string</returns>
+        /// <seealso cref="Cls_Password.AES_Encrypt(byte[], byte[])"/>
+        public static string EnCrypt(string Value, string Key)
+        {
+            if (Value == null || Value == "")
+            {
+                return Value;
+            }
+            else
+            {
+                // Get the bytes of the string
+                byte[] bytesToBeEncrypted = Encoding.UTF8.GetBytes(Value);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(Key);
+                // Hash the password with SHA256
+                passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
+                byte[] bytesEncrypted = AES_Encrypt(bytesToBeEncrypted, passwordBytes);
+                string result = Convert.ToBase64String(bytesEncrypted);
+                return result;
+            }
+        }
+        #endregion
+
+        #region public static string Decrypt(string Value, string Key)
+        /// <summary>
+        /// SMT algoritması ile şifreyi çözer.İlk parametre şifresi çözülecek kelime, ikinci parametre ise belirnen şifreyi çözecek keydir.
+        /// </summary>
+        /// <param name="Value">Şifresi çözülecek kelime</param>
+        /// <param name="Key">Kelimenin şifeleme anahtarı</param>
+        /// <returns>string</returns>
+        /// <seealso cref="Cls_Password.AES_Decrypt(byte[], byte[])"/>
+        public static string Decrypt(string Value, string Key)
+        {
+            if (Value == null)
+            {
+                return Value;
+            }
+            else
+            {
+                // Get the bytes of the string
+                byte[] bytesToBeDecrypted = Convert.FromBase64String(Value);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(Key);
+                passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
+                byte[] bytesDecrypted = AES_Decrypt(bytesToBeDecrypted, passwordBytes);
+                string result = Encoding.UTF8.GetString(bytesDecrypted);
+                return result;
+            }
+        }
+        #endregion
+
+        #region public static string EnCrypt(string Value)
+        /// <summary>
+        /// SMT algoritması ile şifreleme yapar  şifrelenecek kelime yazılır ve uygulamanın "Cls_Settings.DefaultPasswordKey" bilgisi ile text şifrelenir.
+        /// </summary>
+        /// <param name="Value">Şifrelenecek Kelime</param>       
+        /// <returns>string</returns>
+        /// <seealso cref="Cls_Password.AES_Encrypt(byte[], byte[])"/>
+        public static string EnCrypt(string Value)
+        {
+            if (Value == null || Value == "")
+            {
+                return Value;
+            }
+            else
+            {
+                // Get the bytes of the string
+                byte[] bytesToBeEncrypted = Encoding.UTF8.GetBytes(Value);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(Cls_Settings.DefaultPasswordKey);
+                // Hash the password with SHA256
+                passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
+                byte[] bytesEncrypted = AES_Encrypt(bytesToBeEncrypted, passwordBytes);
+                string result = Convert.ToBase64String(bytesEncrypted);
+                return result;
+            }
+        }
+        #endregion
+
+        #region public static string Decrypt(string Value)
+        /// <summary>
+        /// SMT algoritması ile şifreyi çözer.şifresi çözülecek kelime yazılır ve sistemin standart şifre anahtarı olan "Cls_Settings.DefaultPasswordKey" bilgisi ile şifre çözülür!
+        /// </summary>
+        /// <param name="Value">Şifresi çözülecek kelime</param>        
+        /// <returns>string</returns>
+        /// <seealso cref="Cls_Password.AES_Decrypt(byte[], byte[])"/>
+        public static string Decrypt(string Value)
+        {
+            if (Value == null)
+            {
+                return Value;
+            }
+            else
+            {
+                // Get the bytes of the string
+                byte[] bytesToBeDecrypted = Convert.FromBase64String(Value);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(Cls_Settings.DefaultPasswordKey);
+                passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
+                byte[] bytesDecrypted = AES_Decrypt(bytesToBeDecrypted, passwordBytes);
+                string result = Encoding.UTF8.GetString(bytesDecrypted);
+                return result;
+            }
+        }
+        #endregion
     }
 
 }

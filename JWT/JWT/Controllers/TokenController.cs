@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
 using JWT.Class.Dal;
+using JWT.Class.GlobalClass;
 
 namespace JWT.Controllers
 {
@@ -28,6 +29,7 @@ namespace JWT.Controllers
         /// </summary>
         private IJWT IJwtAuthenticationManager;
 
+
         /// <summary>
         /// Loglama iþlemleri için gerekli olan parametreleri içinde bulunduran deðiþkendir.
         /// </summary>
@@ -46,6 +48,7 @@ namespace JWT.Controllers
         {
             _logger = logger;
             this.IJwtAuthenticationManager = IJwtAuthenticationManager;
+
         }
         #endregion       
 
@@ -60,7 +63,7 @@ namespace JWT.Controllers
         /// <seealso cref="IJWT"/>
         /// <seealso cref="Cls_Jwt.Authhenticate(string, string, ConnectionInfo)"/>
         [SwaggerOperation(Description = "Bu web apide bulunan ve Authorize iþlemine tutulan metotlarýn çalýþtýrýlabilmesi için bu metot ile login olunmalýdýr.",
-        Summary = "Login Ýþlemleri",Tags =new string[] { "Login" })]
+        Summary = "Login Ýþlemleri", Tags = new string[] { "Login" })]
         [AllowAnonymous]
         //[HttpPost("authenticate")]
         [HttpGet]
@@ -78,6 +81,26 @@ namespace JWT.Controllers
             return Ok(User);
         }
 
+        /// <summary>
+        /// Authenticate i test etmek için geliþtirildi.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        [SwaggerOperation(Description = "Test amaçlý Authorize Ýþlemi Yapar Ve Geriye Bir Token döndürür!.",
+        Summary = "Login Test Ýþlemi", Tags = new string[] { "Test Login" })]
+        public IActionResult AuthenticateTest()
+        {
+            Mdl_User User = IJwtAuthenticationManager.Authhenticate("sametasar@gmail.com", "test", HttpContext.Connection);
+
+            if (User == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(User.LastServiceToken);
+        }
+              
         #endregion
 
     }

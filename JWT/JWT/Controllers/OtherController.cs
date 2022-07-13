@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
 using JWT.Class.Dal;
+using JWT.Class.GlobalClass;
 
 namespace JWT.Controllers
 {
@@ -74,7 +75,7 @@ namespace JWT.Controllers
             return CurrenciesExchange.GetDataTableAllCurrenciesTodaysExchangeRates();
         }
 
-        #endregion       
+        #endregion      
 
         #endregion      
 

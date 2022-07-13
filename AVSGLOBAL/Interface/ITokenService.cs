@@ -1,4 +1,4 @@
-﻿using AVSGLOBAL.Class.Models;
+﻿using AVSGLOBAL.Models.GlobalModel;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace AVSGLOBAL.Interface

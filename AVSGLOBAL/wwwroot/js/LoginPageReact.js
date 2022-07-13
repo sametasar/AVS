@@ -1,15 +1,3 @@
-
- /**
-  Bu class Login sayfasında bulunan kontrollerdeki yazıları tek noktadan yönetmemizi sağlar.
-//   @memberof Cls_Login
-//   @property {string}   Title       login sayfasının başlık bilgisini tutar.
-//   @property {string}   UserName    Login sayfasında kullanıcı adı kontrolüne girilen değerleri tutar.
-//   @property {string}   Password    Login sayfasında Password kontrolüne girilen değeri tutar.
-//   @property {string}   Remember    Beni hatırla bilgisini barındırır.
-//   @property {string}   Button      Login buton bilgilerini üzerinde tutar.
-//   @property {string}   Register    Register bilgisini tutar.
-//   @property {string}   Forgot      Şifremi unuttum bilgisini üzerinde tutar.
-  */
 class Cls_Login {
 
     constructor(Title, UserName, Password, Remember,Button,Register,Forgot) {

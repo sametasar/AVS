@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AVSGLOBAL.Class.Models;
-using AVSGLOBAL.Class.Global;
+using AVSGLOBAL.Models.GlobalModel;
+using AVSGLOBAL.Class.GlobalClass;
 using AVSGLOBAL.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 
 namespace AVSGLOBAL.Controllers
@@ -56,9 +58,22 @@ namespace AVSGLOBAL.Controllers
 
                 generatedToken =  _tokenService.BuildToken(validUser, HttpContext.Connection);
 
+                validUser.LastToken = generatedToken;  //Servis tarafında servis tokeni bu objeye verilmişti. Şimdide client tarafının tokenini veriyorum.
+
+                validUser.LastIP = HttpContext.Connection.RemoteIpAddress.ToString();
+
+                //Bu noktada kullanıcının ClientTokeninide veri tabanında güncelliyorum.
+                await new Cls_User().UpdateClientTokenAndIP(validUser);
+
+                //Kullanıcı bilgilerimi bir session içine şifreleyerek atıyorum. Başka sayfalarda kullanmak için decrypt yaparak kullanabilirsin!
+                HttpContext.Session.SetString("UserInfo", Cls_Tools.EnCrypt(JsonConvert.SerializeObject(validUser)));
+
                 if (generatedToken != null)
                 {
                     HttpContext.Session.SetString("Token", generatedToken);
+                    
+                    
+
                     return RedirectToAction("MainWindow");
                 }
                 else

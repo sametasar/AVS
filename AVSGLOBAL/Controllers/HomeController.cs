@@ -1,5 +1,5 @@
-﻿using AVSGLOBAL.Class.Models;
-using AVSGLOBAL.Class.Global;
+﻿using AVSGLOBAL.Models.GlobalModel;
+using AVSGLOBAL.Class.GlobalClass;
 using AVSGLOBAL.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

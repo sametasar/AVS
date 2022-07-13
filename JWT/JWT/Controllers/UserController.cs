@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
 using JWT.Class.Dal;
+using JWT.Class.GlobalClass;
 
 namespace JWT.Controllers
 {
@@ -21,6 +22,7 @@ namespace JWT.Controllers
     [Route("user/[action]")]
     public class UserController : ControllerBase
     {
+      
         #region PROPERTIES       
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace JWT.Controllers
         #region GET USER
 
         [SwaggerOperation(Description = "Test Kullanýcýs bilgilerini döndürür.",
-         Summary = "Test Kullanýcýsý", Tags = new string[] { "Test Kullanýcýsý" })]       
+         Summary = "Test Kullanýcýsý Getirir", Tags = new string[] { "Test Kullanýcýsý Getirir" })]       
         [HttpGet]
         [Description("Yalnýzca test kullanýcýsý bilgilerini döndürür.")]
         public Mdl_User Get_Users()
@@ -62,10 +64,98 @@ namespace JWT.Controllers
         }
 
         #endregion
+    
+        #region STANDART PASSWORD DECRYPT
 
-        #endregion      
+        [SwaggerOperation(Description = "Uygulama Default Key ile þifrelenen kelimenin þifresini çözer.",
+         Summary = "Default Password Decrypt", Tags = new string[] { "Default Password Decrypt" })]
+        [HttpGet]
+        [Description("Uygulama Default Key ile þifrelenen kelimenin þifresini çözer.")]
+        public string StandartDecrypt(string Text)
+        {
+            return Cls_Tools.Decrypt(Text);
+        }
+
+        #endregion
+
+        #region CUSTOM PASSWORD DECRYPT
+
+        [SwaggerOperation(Description = "Kullanýcýnýn belirlediði Key  ile þifrelenen kelimenin þifresini çözer.",
+         Summary = "Default Password Decrypt", Tags = new string[] { "Default Password Decrypt" })]
+        [HttpGet]
+        [Description("Kullanýcýnýn belirlediði Key  ile þifrelenen kelimenin þifresini çözer.")]
+        public string CustomDecrypt(string Text,string Key)
+        {
+            return Cls_Tools.Decrypt(Text,Key);
+        }
+
+        #endregion
+
+        #region STANDART PASSWORD ENCRYPT
+
+        [SwaggerOperation(Description = "Uygulama Default Keyi ile text þifreler.",
+         Summary = "Default Password Encrypt", Tags = new string[] { "Default Password Encrypt" })]
+        [HttpGet]
+        [Description("Uygulama Default Keyi ile text þifreler.")]
+        public string StandartEncrypt(string Text)
+        {
+            return Cls_Tools.EnCrypt(Text);
+        }
+
+        #endregion
+
+        #region CUSTOM PASSWORD ENCRYPT
+
+        [SwaggerOperation(Description = "Kullanýcýnýn belirlediði Key ile verilen texti þifreler.",
+         Summary = "Custom Password Encrypt", Tags = new string[] { "Custom Password Encrypt" })]
+        [HttpGet]
+        [Description("Kullanýcýnýn belirlediði Key ile verilen texti þifreler.")]
+        public string CustomEncrypt(string Text, string Key)
+        {
+            return Cls_Tools.EnCrypt(Text, Key);
+        }
+
+        #endregion
+
+        #region UPDATE_CLIENT_TOKEN_&_IP
+
+        /// <summary>
+        /// Kullanýcýnýn Client tarafýnda bulunan token ve IP bilgisini veritabanýna bulunan kolonlarýný günceller. Her zaman kullanýcýnýn en son ip adresi ve token bilgisi User tablosunda ilgili satýrýnda güncel kalýr.
+        /// Kullanýcýnýn veritabanýnad güncellenen bu alanlarýnýn isimleri, [LastToken] ve [LastIP] alanlarýdýr.
+        /// </summary>
+        [SwaggerOperation(Description = "Bir kullanýcýnýn client tarfýnda oluþturduðu token bilgisini veritabanýna yazar.",
+         Summary = "Client Token Update Database", Tags = new string[] { "Client Token Update Database" })]
+        [HttpPost]
+        [Description("Bir kullanýcýnýn client tarfýnda oluþturduðu token bilgisini veritabanýna yazar.")]
+        public async Task<string> UpdateClientTokenAndIP(List<Mdl_KeyValue> data)
+        {            
+            if(data.Count<3)
+            {
+                return "Hata! Parametrelerin parse edilemiyor!";
+            }
+            
+            string UserID = data[0].Value;
+            string ClientToken= data[1].Value;
+            string LastIP= data[2].Value;
+
+            //Kullanýcýyý getir güncelle veritabanýna yaz!
+
+            Cls_DbContext db = new Cls_DbContext();
+
+            Mdl_User User = db.User.Where(x => x.ID == Convert.ToInt32(UserID)).FirstOrDefault();
+
+            User.LastToken = ClientToken;
+            User.LastIP = LastIP; //Clientýn IP adresi kayýt edilir.
+
+            db.User.Update(User);
+
+            return (await db.SaveChangesAsync()).ToString();
+        }
+
+        #endregion
+
+        #endregion
 
     }
-
-    #endregion   
+    #endregion
 }

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using AVSGLOBAL.Class.Dal;
-using AVSGLOBAL.Class.Global;
+using AVSGLOBAL.Class.GlobalClass;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +27,10 @@ Cls_Settings.JWTAUDIENCE = builder.Configuration["Settings:AUDIENCE"];
 //Ana Web Servisi Burada Belirtiyoruz! Tüm Gelen Requestleri Buraya Aktarabiliriz! Extar güvenli bir yapı inşaa edilmek istenirse.
 //Ana servisin ip adresi bu sayede yalnızca bizim tarafımızdan bilinecek istenildiği durumda ip trafiği değiştirilebilinecek.
 Cls_Settings.MAIN_WEB_SERVICE = builder.Configuration["Settings:MAIN_WEB_SERVICE"];
+/// <summary>
+/// String şifrelemede kullanılan key
+/// </summary>
+Cls_Settings.DefaultPasswordKey = builder.Configuration["Settings:DefaultPasswordKey"];
 
 /// <summary>
 /// Web uygulamamızda token ne kadar süre devrede kalacak bilgisi!

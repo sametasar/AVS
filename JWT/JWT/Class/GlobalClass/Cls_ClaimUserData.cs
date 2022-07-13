@@ -1,10 +1,25 @@
-﻿namespace JWT.Class.GlobalClass
+﻿using JWT.Class.Models.GlobalModels;
+
+namespace JWT.Class.GlobalClass
 {
-    /// <summary>
-    /// Oluşturulan Token Çalındıında Extra Güvenlik Mekanizması İçin Oluşturulmuştur.Tokeni Çalan kişinin IP adresi, tarayıcı bilgisi ve timestamp bilgileri burada kontrol edilir.
-    /// Bilgilerden herhangi biri tutarsız olursa extra yazacaqğınız güvenlik mekanizması kodlarıyla token hırsızlıını durdurabilirsiniz. Tokeni çalan kişi tokeni çalsa bile işlem yapamaz.
-    /// </summary>
-    public class Cls_ClaimUserData
+
+
+    public class Mdl_Claim
+    {
+        public Mdl_User User { get; set; }
+
+        public Mdl_ClaimUserData UserExtraData { get; set; }
+
+    }
+
+
+
+
+        /// <summary>
+        /// Oluşturulan Token Çalındıında Extra Güvenlik Mekanizması İçin Oluşturulmuştur.Tokeni Çalan kişinin IP adresi, tarayıcı bilgisi ve timestamp bilgileri burada kontrol edilir.
+        /// Bilgilerden herhangi biri tutarsız olursa extra yazacaqğınız güvenlik mekanizması kodlarıyla token hırsızlıını durdurabilirsiniz. Tokeni çalan kişi tokeni çalsa bile işlem yapamaz.
+        /// </summary>
+        public class Mdl_ClaimUserData
     {
         /// <summary>
         /// Tokeni oluşturan kullanıcının ip adresi.
