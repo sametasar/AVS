@@ -33,7 +33,9 @@ Cls_Settings.TokenExpireMinute = Convert.ToDouble(builder.Configuration["Setting
 
 Cls_Settings.SelectDatabseEngine = builder.Configuration["Settings:SelectDatabseEngine"];
 
-
+//Ana Web Servisi Burada Belirtiyoruz! Tüm Gelen Requestleri Buraya Aktarabiliriz! Extar güvenli bir yapý inþaa edilmek istenirse.
+//Ana servisin ip adresi bu sayede yalnýzca bizim tarafýmýzdan bilinecek istenildiði durumda ip trafiði deðiþtirilebilinecek.
+//Cls_Settings.MAIN_WEB_SERVICE = builder.Configuration["Settings:MAIN_WEB_SERVICE"];
 
 /* #region  DEFAULT MS SQL CONNECTION */
 Cls_DefaultMsSql.UserName = builder.Configuration.GetSection("MSSQL").GetSection("USER").Value; //  Configuration["MSSQLUSER"];
@@ -90,8 +92,7 @@ Cls_DefaultMongodb.Server = builder.Configuration.GetValue<string>("MONGODB:SERV
 
 // Add services to the container.
 
-int sayi = 1;
-builder.Services.AddDbContext<Cls_DbContext>(options =>
+builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     Enm_Database_Type DatabaseType = Enm_Database_Type.SqlLite;
 
@@ -201,7 +202,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-
 
 app.Run();

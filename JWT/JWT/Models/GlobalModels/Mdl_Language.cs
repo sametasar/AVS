@@ -39,7 +39,7 @@ namespace JWT.Class.Models.GlobalModels
         /// Kaydının silinme bilgisi.
         /// </summary>
         [DefaultValue("false")]
-        public bool Deleted { get; set; }
+        public bool Deleted { get; set; }        
 
         /// <summary>
         /// Mdl_Language classından oluşan objeyi yok eder.

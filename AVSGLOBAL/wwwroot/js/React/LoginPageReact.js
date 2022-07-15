@@ -13,20 +13,18 @@ class Cls_Login {
 
 var LoginObject = new Cls_Login();
 
-///Sayfada bulunan kontrolleri ilklendirmemize yarar.
 function Init() {
-    LoginObject.Title = "";
+    LoginObject.Title = "AVS GLOBAL SUPPLY " +TranslateControl(2) +" "+ TranslateControl(9);
     LoginObject.UserName = "";
     LoginObject.Password = "";
-    LoginObject.Remember = "Remember Me";
-    LoginObject.Button = "Giriş";
-    LoginObject.Register = "Register Now!";
-    LoginObject.Forgot = "Forgot password ?";
+    LoginObject.Remember = TranslateControl(5);
+    LoginObject.Button = TranslateControl(2);
+    LoginObject.Register = TranslateControl(6);
+    LoginObject.Forgot = TranslateControl(4);
 }
 
 Init();
 
-///Login form başlığı, LoginObject.Title değeri nuıll ise "AVS GLOBAL SUPPLY Login" yazacak.
 class LoginTitle extends React.Component {
     render() {
         return (
@@ -39,7 +37,6 @@ class LoginTitle extends React.Component {
     }
 }
 
-///Kullanıcı adının girileceği UserName komponenti.
 class UserName extends React.Component {
 
     constructor() {
@@ -49,13 +46,6 @@ class UserName extends React.Component {
         };
     }
 
-    /**
-     * TextChange eventi UserName textbox ı değişimini yakalayan eventdir. "onChange={() => this.TextChange(event)}" ile çağrılır.
-     * @memberof TextChange
-     * @param event Event text kutusunun değişim anındakidurumunu gönderir. İçinde ilgili textboxın veerilerine ulaşabilirsiniz.
-     *
-     * @return UserName Textbox componentinin constructor içinde bulunan  state durum bilgilerindeki text değerini günceller.
-     */
     TextChange(event) {
         this.setState((prevState, props) => {
 
@@ -72,14 +62,13 @@ class UserName extends React.Component {
                 <div className="input-field col s12">
                     <i className="material-icons prefix pt-2">person_outline</i>
                     <input id="username" type="text" onChange={() => this.TextChange(event)} />
-                    <label htmlFor="username" className="center-align">Username</label>
+                    <label htmlFor="username" className="center-align">{TranslateControl(3)}</label>
                 </div>
             </div>
         )
     }
 }
 
-///Password kontrolü
 class Password extends React.Component {
 
     constructor() {
@@ -106,14 +95,13 @@ class Password extends React.Component {
                 <div className="input-field col s12">
                     <i className="material-icons prefix pt-2">lock_outline</i>
                     <input id="password" type="password" onChange={() => this.TextChange(event)}/>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{TranslateControl(8)}</label>
                 </div>
             </div>
         )
     }
 }
 
-///Beni hatırla kontrolü
 class Remember extends React.Component {
     render() {
         return (
@@ -131,44 +119,18 @@ class Remember extends React.Component {
     }
 }
 
-
-///Login butonu kontrolü için geliştirilmiştir.Buton tıklandığında LoginTest Metodu devreye girer. LoginTest Metodu içinde axios ile /login web servisi tetiklenir.
 class LoginButton extends React.Component {
 
-
     LoginTest() {
-
-        //axios.get("/Login/LoginTest?UserName=" + LoginObject.UserName + "&Password=" + LoginObject.Password + "")
-        //    .then(function (response) {
-        //        console.log(response.data);
-        //        alert("İşlem Tamam");
-        //    })
-        //    .catch(function (error) {
-        //        console.log(error);
-        //    });
 
         axios.get("/login?Email=" + LoginObject.UserName + "&Password=" + LoginObject.Password + "")
             .then(function (response) {
                 console.log(response.data);
-                window.location.href = "/MainWindow";
+                window.location.href = AppAddress+"/mainwindow";
             })
             .catch(function (error) {
                 console.log(error);
             });
-
-            //Post için gerekli request örnei, daha fazla örnek için dökümantasyona bakabilirsin!
-            //axios.post('/login', {
-            //    Email: this.username,
-            //    Password: this.password
-            // })
-            // .then(function (response) {
-            //     console.log(response.data);
-            //        window.location.href = "/Home/MainWindow";
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            //     alert("Şifre yanlış!");
-            // });
     }
 
     render() {
@@ -203,7 +165,7 @@ class Forgot extends React.Component {
     }
 }
 
-function RenderApp() {
+function RenderReact() {
 
     class LoginForm extends React.Component {
 
@@ -235,4 +197,11 @@ function RenderApp() {
     root.render(<LoginForm />);
 }
 
-window.onload = RenderApp;
+RenderReact();
+
+// Bir dijital ürün ve kullanıcıları birbirini beklemeden (400ms den daha kısa bir sürede) etkileşimde bulunuyorsa, verimlilik dorukta olur.
+// setTimeout(function(){
+
+//     RenderReact();
+
+// }, 400); 

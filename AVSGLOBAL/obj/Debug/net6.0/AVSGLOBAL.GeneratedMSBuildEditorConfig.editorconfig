@@ -8,61 +8,89 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AVSGLOBAL
 build_property.RootNamespace = AVSGLOBAL
-build_property.ProjectDir = C:\PROJELER\AVS\AVSGLOBAL\
+build_property.ProjectDir = c:\PROJELER\AVS\AVSGLOBAL\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\PROJELER\AVS\AVSGLOBAL
+build_property.MSBuildProjectDirectory = c:\PROJELER\AVS\AVSGLOBAL
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Home/Index.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Home/MainWindow.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Home/MainWindow.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNYWluV2luZG93LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Home/Privacy.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Home/yedek/Index.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Home/yedek/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVx5ZWRla1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Home/yedek/Privacy.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Home/yedek/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVx5ZWRla1xQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Login/LoginPageReact.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Login/LoginPageReact.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cTG9naW5QYWdlUmVhY3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Login/LoginPageVue.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Login/LoginPageVue.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cTG9naW5QYWdlVnVlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Error.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Shared/_LayoutYedek.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/BottomMenu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcQm90dG9tTWVudS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/Customizer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcQ3VzdG9taXplci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/Footer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcRm9vdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/Header.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcSGVhZGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/LeftMenu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcTGVmdE1lbnUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/RightMenu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcUmlnaHRNZW51LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/Partial/TEMPLATE/Top.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxcVEVNUExBVEVcVG9wLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/_LayoutYedek.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRZZWRlay5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Shared/_ValidationScriptsPartial.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/_ViewImports.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/_ViewStart.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/PROJELER/AVS/AVSGLOBAL/Views/Shared/_Layout.cshtml]
+[c:/PROJELER/AVS/AVSGLOBAL/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-v2zg7j1lt8

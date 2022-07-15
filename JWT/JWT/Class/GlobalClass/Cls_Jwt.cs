@@ -18,7 +18,7 @@ namespace JWT.Class.GlobalClass
     /// </summary>
     public class Cls_Jwt : IJWT
     {
-        Cls_DbContext db = new Cls_DbContext();
+        DatabaseContext db = new DatabaseContext();
 
         private IConfiguration Configuration { get; set; }
 
@@ -57,6 +57,11 @@ namespace JWT.Class.GlobalClass
             Mdl_User User = new Mdl_User();
 
             User = db.User.Where(x => x.Email == Email && x.Password == Cls_Tools.EnCrypt(Password)).FirstOrDefault() ?? User; 
+
+            if(User.Name==null)
+            {
+                return null;
+            }
 
             #endregion
 

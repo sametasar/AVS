@@ -58,7 +58,7 @@ namespace JWT.Controllers
         /// </summary>     
         public async void Create_TestData()
         {
-            Cls_DbContext db = new Cls_DbContext();
+            DatabaseContext db = new DatabaseContext();
 
             #region DÝLLER OLUÞTURULUR
 
@@ -125,6 +125,11 @@ namespace JWT.Controllers
             Ld8.ControlID = 8;
             Ld8.Word = "Þifre";
 
+            Mdl_LanguageDictionary Ld9 = new Mdl_LanguageDictionary();
+            Ld9.LanguageID = 1;
+            Ld9.ControlID = 9;
+            Ld9.Word = "Ekraný";
+
             db.LanguageDictionary.Add(Ld1);
             db.LanguageDictionary.Add(Ld2);
             db.LanguageDictionary.Add(Ld3);
@@ -133,6 +138,7 @@ namespace JWT.Controllers
             db.LanguageDictionary.Add(Ld6);
             db.LanguageDictionary.Add(Ld7);
             db.LanguageDictionary.Add(Ld8);
+            db.LanguageDictionary.Add(Ld9);
 
 
             //ÝNGÝLÝZCE
@@ -155,7 +161,7 @@ namespace JWT.Controllers
             Mdl_LanguageDictionary Lm4 = new Mdl_LanguageDictionary();
             Lm4.LanguageID = 2;
             Lm4.ControlID = 4;
-            Lm4.Word = "Forgot PAssword";
+            Lm4.Word = "Forgot Password";
 
             Mdl_LanguageDictionary Lm5 = new Mdl_LanguageDictionary();
             Lm5.LanguageID = 2;
@@ -177,6 +183,11 @@ namespace JWT.Controllers
             Lm8.ControlID = 8;
             Lm8.Word = "Password";
 
+            Mdl_LanguageDictionary Lm9 = new Mdl_LanguageDictionary();
+            Lm9.LanguageID = 2;
+            Lm9.ControlID = 9;
+            Lm9.Word = "Screen";
+
             db.LanguageDictionary.Add(Lm1);
             db.LanguageDictionary.Add(Lm2);
             db.LanguageDictionary.Add(Lm3);
@@ -185,6 +196,7 @@ namespace JWT.Controllers
             db.LanguageDictionary.Add(Lm6);
             db.LanguageDictionary.Add(Lm7);
             db.LanguageDictionary.Add(Lm8);
+            db.LanguageDictionary.Add(Lm9);
 
             #endregion
 

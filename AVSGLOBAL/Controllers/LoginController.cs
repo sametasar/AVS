@@ -5,6 +5,8 @@ using AVSGLOBAL.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using SMTML;
+
 
 
 namespace AVSGLOBAL.Controllers
@@ -28,24 +30,22 @@ namespace AVSGLOBAL.Controllers
         }
 
         public IActionResult LoginPageReact()
-        {
-            return View();
+        { 
+            return new SMTML.SMTMLReact(new List<string>{"LoginPageReact"}).View();           
         }
        
         [AllowAnonymous]
         [Route("login")]
         [HttpGet]
-        public async Task<IActionResult> Login(string Email,string Password)
+        public async Task<string> Login(string Email,string Password)
         {
-
             Mdl_User userModel = new Mdl_User();
             userModel.Email = Email;
             userModel.Password = Password;
 
-
             if (string.IsNullOrEmpty(userModel.Email) || string.IsNullOrEmpty(userModel.Password))
             {
-                return (RedirectToAction("Error"));
+                return "0";
             }
 
             IActionResult response = Unauthorized();
@@ -72,18 +72,16 @@ namespace AVSGLOBAL.Controllers
                 {
                     HttpContext.Session.SetString("Token", generatedToken);
                     
-                    
-
-                    return RedirectToAction("MainWindow");
+                    return "1";
                 }
                 else
                 {
-                    return (RedirectToAction("Error"));
+                    return "0";
                 }
             }
             else
             {
-                return (RedirectToAction("Error"));
+                return "0";
             }
         }        
     }

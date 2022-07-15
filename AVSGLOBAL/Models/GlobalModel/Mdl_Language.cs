@@ -28,7 +28,7 @@ namespace AVSGLOBAL.Models.GlobalModel
         /// Default tabloda sadece 1 tane olabilir bu yüzden tabloda bir update trigger yaptık her hangi bir kayıtda default değeri değiştiğinde diğer kayıtlarda ki default değerleri false edilir.
         /// Web sitesine kullanıcı yeni girdiğinde hiç bir seçimi yoksa bu durumda default devreye girer.
         /// </summary>
-        public string? Default { get; set; }
+        public bool? Default { get; set; }
 
         /// <summary>
         /// Dil seçimlerinde gösterilecek imaj genellikle bayrak resimleri olur.

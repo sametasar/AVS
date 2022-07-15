@@ -140,7 +140,7 @@ namespace JWT.Controllers
 
             //Kullanýcýyý getir güncelle veritabanýna yaz!
 
-            Cls_DbContext db = new Cls_DbContext();
+            DatabaseContext db = new DatabaseContext();
 
             Mdl_User User = db.User.Where(x => x.ID == Convert.ToInt32(UserID)).FirstOrDefault();
 

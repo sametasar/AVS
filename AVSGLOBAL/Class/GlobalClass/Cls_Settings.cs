@@ -1,5 +1,88 @@
 ﻿namespace AVSGLOBAL.Class.GlobalClass
 {
+
+     public static class Cls_DefaultMsSql
+    {
+        public static string UserName { get; set; }
+
+        public static string Password { get; set; }
+
+        public static string Server { get; set; }
+
+        public static string Database { get; set; }
+
+    }
+
+    public static class Cls_DefaultMySql
+    {
+        public static string UserName { get; set; }
+
+        public static string Password { get; set; }
+
+        public static string Server { get; set; }
+
+        public static string Database { get; set; }
+
+    }
+
+
+    public static class Cls_DefaultOracle
+    {
+        public static string UserName { get; set; }
+
+        public static string Password { get; set; }
+
+        public static string Server { get; set; }
+
+        public static string Database { get; set; }
+
+    }
+
+    public static class Cls_DefaultPostgreSql
+    {
+        public static string UserName { get; set; }
+
+        public static string Password { get; set; }
+
+        public static string Server { get; set; }
+
+        public static string Database { get; set; }
+
+    }
+
+
+    public static class Cls_DefaultMongodb
+    {
+        public static string UserName { get; set; }
+
+        public static string Password { get; set; }
+
+        public static string Server { get; set; }
+
+        public static string Database { get; set; }
+
+    }
+
+  
+    public static class Cls_DefaultSqlLite
+    {
+        public static string Directory { get; set; }
+
+        public static string DataSource { get; set; }
+
+        public static int Version { get; set; }
+
+        public static int DefaultTimeout { get; set; }
+
+        public static bool FailIfMissing { get; set; }
+
+        public static string Password { get; set; }
+
+        public static bool Readonly { get; set; }
+
+    }
+
+
     /// <summary>
     /// Projenin tüm ayarları buradan yönetilir.Default veritabanı bağlantı bilgileri.Default email hesap bilgileri,token ayar bilgileri.
     /// </summary>
@@ -39,34 +122,37 @@
         public static string JWTKEY { get; set; }
 
         /// <summary>
-        ///  Yayıncı hak sahibi, firma bilgisi vb.
+        /// Yayıncı hak sahibi, firma bilgisi vb.
         /// </summary>
-        /// <value></value>
-        public static string JWTISSUER {get; set;}
+        public static string JWTISSUER { get; set; }
 
         /// <summary>
         /// Kapsama alanı
         /// </summary>
-        /// <value></value>
         public static string JWTAUDIENCE { get; set; }
-
-        /// <summary>
-        /// Bu  client uygulamasının çalıştığı bir web servisi varsa web servisin adresi burada belirtilir. Web servis adresinin sonuna "/" yazmayın!
-        /// </summary>
-        /// <value></value>
-        public static string MAIN_WEB_SERVICE { get; set; }
-
+       
         /// <summary>
         /// Oluşturulan Jwt tokenin dakika olarak sistemde geçerli olacağı süre.
         /// </summary>
-        /// <value></value>
         public static double TokenExpireMinute { get; set; }
 
-         /// <summary>
+        /// <summary>
         /// Uygulama içersinde string bilgileri şifrelemede kullanılır. Bazen veritabanına şifre kayıt ederken kvkk ya uygun data şifreleme için, bazende cookir oluştururken cookie içinde alıacak bilgileri decrypt ederken.
         /// Bu tür şifrelemeleri yaparken default olarak kullanılmaktadır. Bu bilginin veritabanı şifrelemelerinde sürekli değiştirilmemesi gereklidir. Önceden şifrelenen  veri tabanında bulunan şifreler bu değiştiğinde çözülemez!
         /// Tamamen değiştirilecekse önce veri tabanında kli şifreler decrype edilmeli ve sonrasında tekrar yeni şifre ile şifrelenerek yerine konmalıdır.
         /// </summary>
         public static string DefaultPasswordKey { get; set; }
-    }
+
+        /// <summary>
+        /// Uygulamanın default olarak kullandığı veritabanı. MS SQL , MYSQL, ORACLE, POSTGRE,MONGO DB VB.
+        /// </summary>
+        public static string SelectDatabseEngine { get; set; }
+
+        /// <summary>
+        /// Web servis adresi
+        /// </summary>
+        /// <value></value>
+        public static string MAIN_WEB_SERVICE { get; set; }
+    } 
+ 
 }

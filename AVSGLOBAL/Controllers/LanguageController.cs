@@ -27,16 +27,11 @@ namespace AVSGLOBAL.Controllers
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        [Route("language")]
+        [Route("GetLanguageDictionary")]
         [HttpGet]
         public async Task<string> GetLanguageDictionary()
         {
-            string UserInfo = Cls_Tools.Decrypt(HttpContext.Session.GetString("UserInfo"));
-
-            Mdl_User User = JsonConvert.DeserializeObject<Mdl_User>(UserInfo);
-
-            return await new Cls_Language().GetLanguageDictionary(User,UserInfo);
-            
+            return await new Cls_Language().GetLanguageDictionary();
         }
     }
 }

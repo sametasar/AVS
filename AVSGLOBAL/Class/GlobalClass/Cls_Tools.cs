@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
+using Microsoft.Data.Sqlite;
 
 namespace AVSGLOBAL.Class.GlobalClass
 {
@@ -21,27 +22,72 @@ namespace AVSGLOBAL.Class.GlobalClass
         public static string RootDirectory { get; set; }
         /* #endregion */
 
-        public static string DefaultConnectionString()
+        public static List<T> ConvertDataTable<T>(DataTable dt)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = GetItem<T>(row);
+                data.Add(item);
+            }
+            return data;
+        }
+        public static T GetItem<T>(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
+
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
+                {
+                    if (pro.Name == column.ColumnName)
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    else
+                        continue;
+                }
+            }
+            return obj;
+        }
+
+
+        public static string DefaultSqlServerConnectionString()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.UserID = "sa";
-            // builder.Password = "test";
-            // builder.InitialCatalog = "AVSCAT";
-            // builder.DataSource = ".";
-            builder.Password = "test";
-            builder.InitialCatalog = "AVSCATERING";
-            builder.DataSource = ".";
+            builder.UserID = Cls_DefaultMsSql.UserName;           
+            builder.Password = Cls_DefaultMsSql.Password;
+            builder.InitialCatalog = Cls_DefaultMsSql.Database;
+            builder.DataSource = Cls_DefaultMsSql.Server;
             builder.PersistSecurityInfo = true;
             builder.TrustServerCertificate = true;
-
-
-            //SqlConnection baglan = new SqlConnection(builder.ConnectionString);
-
-            //baglan.Open();
-            //ConnectionStatus = true;
-            //baglan.Close();
-
             return builder.ConnectionString;
+        }
+
+
+        public static string DefaultMySqlConnectionString()
+        {
+            throw new NotImplementedException();
+
+            //MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder();
+            //builder.UserID = Cls_DefaultMsSql.UserName;
+            //builder.Password = Cls_DefaultMsSql.Password;
+            //builder.Database = Cls_DefaultMsSql.Database;
+            //builder.Server = Cls_DefaultMsSql.Server; 
+            //return builder.ConnectionString;
+        }
+
+
+        public static string DefaultSqliteConnectionString()
+        {
+            SqliteConnectionStringBuilder d = new SqliteConnectionStringBuilder();
+            d.DataSource = System.IO.Directory.GetCurrentDirectory() + Cls_DefaultSqlLite.Directory + Cls_DefaultSqlLite.DataSource;
+            d.DefaultTimeout = Cls_DefaultSqlLite.DefaultTimeout;
+            if (Cls_DefaultSqlLite.Password != null && Cls_DefaultSqlLite.Password != "")
+            {
+                d.Password = Cls_DefaultSqlLite.Password;
+            }
+
+            return d.ConnectionString;
         }
 
         #region Timestamp Zaman Damgaları
@@ -72,36 +118,7 @@ namespace AVSGLOBAL.Class.GlobalClass
 
         #endregion
 
-        public static List<T> ConvertDataTable<T>(DataTable dt)
-        {
-            List<T> data = new List<T>();
-            foreach (DataRow row in dt.Rows)
-            {
-                T item = GetItem<T>(row);
-                data.Add(item);
-            }
-            return data;
-        }
-        public static T GetItem<T>(DataRow dr)
-        {
-            Type temp = typeof(T);
-            T obj = Activator.CreateInstance<T>();
-
-            foreach (DataColumn column in dr.Table.Columns)
-            {
-                foreach (PropertyInfo pro in temp.GetProperties())
-                {
-                    if (pro.Name == column.ColumnName)
-                        pro.SetValue(obj, dr[column.ColumnName], null);
-                    else
-                        continue;
-                }
-            }
-            return obj;
-        } 
-
-
-         #region public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
+        #region public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
         /// <summary>
         /// Aes formatında şifreleme yapar, Şifre metodu ilk parametresinde aldığı string i byte a dönüştürür. ikinci değer ise şifredir oda byte a dönüşür ve şifreleme işlemi Aes algoritmasına göre yapılır.
         /// </summary>
@@ -292,7 +309,6 @@ namespace AVSGLOBAL.Class.GlobalClass
             }
         }
         #endregion
-
     }
 
 }

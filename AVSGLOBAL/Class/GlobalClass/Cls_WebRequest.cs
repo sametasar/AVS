@@ -143,6 +143,8 @@ public static async Task<string> SendRequest(Cls_WebRequestOption options)
             
             string myParameters = "";
 
+        if(options.Parameters!=null)
+        {
             if(options.Parameters.Count>0) //Get Url oluştururken post tipinde başka bir şey yaparız!
             {
                 for(int i=0; i<options.Parameters.Count; i++)
@@ -157,14 +159,19 @@ public static async Task<string> SendRequest(Cls_WebRequestOption options)
                     }
                 }
             }
+        } 
+        else
+        {
+            options.Parameters = new List<Mdl_KeyValue>();
+        }    
+
+            options.TokenType = Enm_TokenTypes.Jwt; //Gelecekde burada Token Tipine göre ek kodlar yazabilirsin. Şu an "JWT Token sadece kullanılmakta."  Microsoft.Identit, Yada OAuth 2 de kullanılabilir.! 
 
             string responseObj = string.Empty;  
             // HTTP GET.  
             using (var client = new HttpClient())  
-            { 
-            
-                options.TokenType = Enm_TokenTypes.Jwt; //Gelecekde burada Token Tipine göre ek kodlar yazabilirsin. Şu an "JWT Token sadece kullanılmakta."  Microsoft.Identit, Yada OAuth 2 de kullanılabilir.!
-
+            {            
+                
 
             switch(options.ActionType)
             {

@@ -21,11 +21,11 @@ namespace JWT.Class.Dal
         MySql =6
 
     }
-    public class Cls_DbContext : DbContext, IDbContext,IDisposable
+    public class DatabaseContext : DbContext, IDbContext,IDisposable
     {       
         private Enm_Database_Type DatabaseType;
 
-        public Cls_DbContext(DbContextOptions<Cls_DbContext> options) : base(options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             ///Veritabanı tipleri arasında enum içinde dönüyorum! Hashcode u eşit olan databsae default databsedir!   appsetting.json da "SelectDatabseEngine" değişken ile istediğim zaman default database i değştirebilirim!
             foreach (Enm_Database_Type foo in Enum.GetValues(typeof(Enm_Database_Type)))
@@ -37,7 +37,7 @@ namespace JWT.Class.Dal
             }            
         }
 
-        public Cls_DbContext()
+        public DatabaseContext()
         {
             ///Veritabanı tipleri arasında enum içinde dönüyorum! Hashcode u eşit olan databsae default databsedir!   appsetting.json da "SelectDatabseEngine" değişken ile istediğim zaman default database i değştirebilirim!
             foreach (Enm_Database_Type foo in Enum.GetValues(typeof(Enm_Database_Type)))
@@ -69,8 +69,9 @@ namespace JWT.Class.Dal
         /// </summary>
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //dotnet ef migrations add AVSCATERING
+        {           
+
+            //dotnet ef migrations add AVSAPI
             //dotnet ef database update
             //dotnet ef migrations add InitialCreate --context DataContext
             //Add - Migration MyMigration - context DataContextName

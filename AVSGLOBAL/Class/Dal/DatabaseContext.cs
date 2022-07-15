@@ -1,11 +1,56 @@
 using Microsoft.EntityFrameworkCore;
 using AVSGLOBAL.Models.GlobalModel;
 using AVSGLOBAL.Class.GlobalClass;
+using AVSGLOBAL.Interface;
 
 namespace AVSGLOBAL.Class.Dal
 {
-    public class DatabaseContext : DbContext
+
+public enum Enm_Database_Type
     {
+        SqlServer =1,
+
+        SqlLite =2,
+
+        Oracle =3,
+
+        PostgreSql =4,
+
+        MongoDb =5,
+
+        MySql =6
+
+    }
+
+    public class DatabaseContext : DbContext, IDbContext,IDisposable
+    {
+
+private Enm_Database_Type DatabaseType;
+
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
+        {
+            ///Veritabanı tipleri arasında enum içinde dönüyorum! Hashcode u eşit olan databsae default databsedir!   appsetting.json da "SelectDatabseEngine" değişken ile istediğim zaman default database i değştirebilirim!
+            foreach (Enm_Database_Type foo in Enum.GetValues(typeof(Enm_Database_Type)))
+            {
+                if(foo.GetHashCode().ToString() == Cls_Settings.SelectDatabseEngine)
+                {
+                    this.DatabaseType = foo;
+                }
+            }            
+        }
+
+        public DatabaseContext()
+        {
+            ///Veritabanı tipleri arasında enum içinde dönüyorum! Hashcode u eşit olan databsae default databsedir!   appsetting.json da "SelectDatabseEngine" değişken ile istediğim zaman default database i değştirebilirim!
+            foreach (Enm_Database_Type foo in Enum.GetValues(typeof(Enm_Database_Type)))
+            {
+                if (foo.GetHashCode().ToString() == Cls_Settings.SelectDatabseEngine)
+                {
+                    this.DatabaseType = foo;
+                }
+            }
+        }
+
         /// <summary>
         /// Sistemelogin olan kullanıcılarıları temsil eder.
         /// </summary>
@@ -27,9 +72,42 @@ namespace AVSGLOBAL.Class.Dal
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(Cls_Tools.DefaultConnectionString());
-            //dotnet ef migrations add AVSCAT
-            //dotnet ef database update            
+           //dotnet ef migrations add AVSCATERING
+            //dotnet ef database update
+            //dotnet ef migrations add InitialCreate --context DataContext
+            //Add - Migration MyMigration - context DataContextName
+
+            switch (DatabaseType)
+            {
+                case Enm_Database_Type.SqlServer:
+                    optionsBuilder.UseSqlServer(Cls_Tools.DefaultSqlServerConnectionString());
+                    break;
+
+                case Enm_Database_Type.SqlLite:
+                    optionsBuilder.UseSqlite(Cls_Tools.DefaultSqliteConnectionString());
+                    break;
+
+                case Enm_Database_Type.Oracle:
+                    optionsBuilder.UseSqlServer(Cls_Tools.DefaultSqlServerConnectionString());
+                    break;
+
+                case Enm_Database_Type.PostgreSql:
+                    optionsBuilder.UseSqlServer(Cls_Tools.DefaultSqlServerConnectionString());
+                    break;
+
+                case Enm_Database_Type.MongoDb:
+                    optionsBuilder.UseSqlServer(Cls_Tools.DefaultSqlServerConnectionString());
+                    break;
+
+                case Enm_Database_Type.MySql:
+                    optionsBuilder.UseSqlServer(Cls_Tools.DefaultSqlServerConnectionString());
+                    break;
+
+                default:
+                    optionsBuilder.UseSqlite(Cls_Tools.DefaultSqliteConnectionString());
+                    break;
+
+            }     
         }
     }
 }

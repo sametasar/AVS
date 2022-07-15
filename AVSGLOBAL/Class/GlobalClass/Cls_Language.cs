@@ -24,32 +24,15 @@ namespace AVSGLOBAL.Class.GlobalClass
         /// Çoklu dil için geliştirildi. Bu uygulamada kullanılan tüm sözlük bilgisini döndürür.
         /// </summary>
         /// <returns></returns>
-        public async Task<string> GetLanguageDictionary(Mdl_User User,string UserInfo)
+        public async Task<string> GetLanguageDictionary()
         {
             Cls_WebRequestOption options = new Cls_WebRequestOption();
             options.ActionType = Enm_ActionTypes.Post;
             options.ApiUrl = "/language/";
-            options.MethodName = "Translate";
-            options.Token = User.LastServiceToken; //Servise gidecek requestlerde servisdeki token kullanılmalı!
-            options.TokenType = Enm_TokenTypes.Jwt;
-
-            Mdl_KeyValue KeyValue1 = new Mdl_KeyValue();
-            KeyValue1.Key = "UserInfo";
-
-            //Servisler arasındaki haberleşmelerde Kullanıcı bilgileri gibi kritik öneme sahip tüm bilgileri her zaman şifreli yapıyorum!
-            KeyValue1.Value = Cls_Tools.EnCrypt(UserInfo);        
-            
-            List<Mdl_KeyValue> ParametreListem = new List<Mdl_KeyValue>();
-            ParametreListem.Add(KeyValue1);           
-
-            options.Parameters =  ParametreListem;
-
+            options.MethodName = "GetLanguageDictionary";
             options.Url = Cls_Settings.MAIN_WEB_SERVICE;
-
-            string str = await Cls_WebRequest.SendRequest(options);
-
-            return str;
-            
+            string json = await Cls_WebRequest.SendRequest(options);
+            return json;            
         }
     
     }

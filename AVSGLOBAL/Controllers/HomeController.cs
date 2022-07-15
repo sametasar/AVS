@@ -25,12 +25,10 @@ namespace AVSGLOBAL.Controllers
         }
 
         
-     
-
         [Authorize]
         [Route("mainwindow")]
         [HttpGet]
-        public IActionResult MainWindow()
+        public IActionResult MainWindow(string name)
         {
             string token = HttpContext.Session.GetString("Token");
 
@@ -44,8 +42,7 @@ namespace AVSGLOBAL.Controllers
                 return (RedirectToAction("Index"));
             }
 
-            ViewBag.Message = BuildMessage(token, 50);
-            return View();
+            return new SMTML.SMTMLReact(new List<string>{"MainPageReact"}).View();       
         }
 
         public IActionResult Error()
@@ -68,4 +65,6 @@ namespace AVSGLOBAL.Controllers
             return result;
         }
     }
+
+    
 }

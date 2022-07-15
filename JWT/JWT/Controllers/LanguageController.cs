@@ -16,7 +16,7 @@ namespace JWT.Controllers
     [Route("language/[action]")]
     public class LanguageController : ControllerBase
     {
-        Cls_DbContext db = new Cls_DbContext();
+        DatabaseContext db = new DatabaseContext();
 
         #region GetLanguageDictionary
 
@@ -24,17 +24,14 @@ namespace JWT.Controllers
         /// Çoklu dil için geliştirildi. Bu uygulamada kullanılan tüm sözlük bilgisini döndürür.
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [SwaggerOperation(Description = "Çoklu dil için geliştirildi. Bu uygulamada kullanılan tüm sözlük bilgisini döndürür.",
          Summary = "Çoklu dil sözlük", Tags = new string[] { "Tüm dillere ait kelimeler." })]
         [HttpPost]
         [Description("Çoklu dil için geliştirildi. Bu uygulamada kullanılan tüm sözlük bilgisini döndürür.")]
-        public string GetLanguageDictionary(dynamic UserInfo)
-        {
-            string UserJson = Cls_Tools.Decrypt(UserInfo);
-
-            Mdl_User User = JsonConvert.DeserializeObject<Mdl_User>(UserInfo);
-
-            return "deneme";
+        public List<Mdl_LanguageDictionary> GetLanguageDictionary()
+        {           
+            return db.LanguageDictionary.ToList<Mdl_LanguageDictionary>();
         }
 
         #endregion
