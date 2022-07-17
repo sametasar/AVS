@@ -48,7 +48,7 @@ namespace JWT.Controllers
 
         #region HAVA DURUMU
 
-        [SwaggerOperation(Description = "Bulunduðunuz lokasyondaki 1 haftalýk hava durumu bilgilerini getirir.", Summary = "Hava Durumu", Tags = new string[] { "Hava Durumu" })]
+        [SwaggerOperation(Description = "Bulunduðunuz lokasyondaki 1 haftalýk hava durumu bilgilerini getirir.", Summary = "Hava Durumu (Token Gerektirir)", Tags = new string[] { "OUT SOURCE" })]
         [Authorize]
         [HttpGet]
         [Description("Bulunduðunuz lokasyondaki 1 haftalýk hava durumu bilgilerini getirir.")]
@@ -65,7 +65,7 @@ namespace JWT.Controllers
 
       
         [SwaggerOperation(Description = "Türkiye cumhuriyeti merkez bankasýndan en güncel döviz kur bilgilerini getirir.",
-         Summary = "Döviz Kurlarý", Tags = new string[] { "Döviz Kurlarý" })] 
+         Summary = "Döviz Kurlarý Token Gerektirir", Tags = new string[] { "OUT SOURCE" })] 
         [Authorize]
         [HttpGet]
         [Description("Türkiye cumhuriyeti merkez bankasýndan en güncel döviz kur bilgilerini getirir.")]

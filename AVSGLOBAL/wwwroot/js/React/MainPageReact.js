@@ -41,25 +41,28 @@ class Tab extends React.Component {
     }
 }
 
+
 function RenderReact() {
 
-    class MainPage extends React.Component {
+    class MainPage extends React.Component { 
 
+        
         render() {
+            
             return (
                 <div>
                     <MainPageTitle />
                 </div>
-            )
+            )            
         }
     }
 
     const container = document.getElementById('root');
     const root = ReactDOM.createRoot(container);
+
     root.render(<MainPage />);
 
     //React Çalıştığından emin Olmak İçin
-   
 }
 
 RenderReact();

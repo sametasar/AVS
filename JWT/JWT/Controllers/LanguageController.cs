@@ -26,7 +26,7 @@ namespace JWT.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [SwaggerOperation(Description = "Çoklu dil için geliştirildi. Bu uygulamada kullanılan tüm sözlük bilgisini döndürür.",
-         Summary = "Çoklu dil sözlük", Tags = new string[] { "Tüm dillere ait kelimeler." })]
+         Summary = "Çoklu dil sözlük", Tags = new string[] { "LANGUAGE" })]
         [HttpPost]
         [Description("Çoklu dil için geliştirildi. Bu uygulamada kullanılan tüm sözlük bilgisini döndürür.")]
         public List<Mdl_LanguageDictionary> GetLanguageDictionary()

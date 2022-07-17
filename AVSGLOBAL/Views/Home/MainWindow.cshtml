@@ -24,11 +24,4 @@
     </div>
   </div>
 </div>
-
-@foreach (var item in this.ViewData)
-    {
-      if(item.Key!="Title")
-      {
-        @Html.Raw(item.Value);
-      }      
-    } 
+@Html.Raw(ViewBag.Library)

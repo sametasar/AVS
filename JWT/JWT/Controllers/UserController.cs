@@ -21,14 +21,15 @@ namespace JWT.Controllers
     [ApiController]
     [Route("user/[action]")]
     public class UserController : ControllerBase
-    {
-      
+    {      
         #region PROPERTIES       
 
         /// <summary>
         /// Loglama iþlemleri için gerekli olan parametreleri içinde bulunduran deðiþkendir.
         /// </summary>
         private readonly ILogger<TokenController> _logger;
+
+        DatabaseContext db = new DatabaseContext();
 
         #endregion
 
@@ -47,13 +48,15 @@ namespace JWT.Controllers
 
         #region METHODS       
 
+        #region USER
+
         #region GET USER
 
         [SwaggerOperation(Description = "Test Kullanýcýs bilgilerini döndürür.",
-         Summary = "Test Kullanýcýsý Getirir", Tags = new string[] { "Test Kullanýcýsý Getirir" })]       
+         Summary = "Test Kullanýcýsý Getirir", Tags = new string[] { "USER" })]
         [HttpGet]
         [Description("Yalnýzca test kullanýcýsý bilgilerini döndürür.")]
-        public Mdl_User Get_Users()
+        public Mdl_User Get_User()
         {
             Mdl_User Kisi = new Mdl_User();
             Kisi.Name = "Mesut";
@@ -63,13 +66,62 @@ namespace JWT.Controllers
             return Kisi;
         }
 
+        #endregion     
+
+        #region UPDATE_CLIENT_TOKEN_&_IP
+
+        /// <summary>
+        /// Kullanýcýnýn Client tarafýnda bulunan token ve IP bilgisini veritabanýna bulunan kolonlarýný günceller. Her zaman kullanýcýnýn en son ip adresi ve token bilgisi User tablosunda ilgili satýrýnda güncel kalýr.
+        /// Kullanýcýnýn veritabanýnad güncellenen bu alanlarýnýn isimleri, [LastToken] ve [LastIP] alanlarýdýr.
+        /// </summary>
+        [SwaggerOperation(Description = "Bir kullanýcýnýn client tarafýnda oluþturduðu token bilgisini veritabanýna yazar.",
+         Summary = "Client Token Update Database. (Token Gerektirir)", Tags = new string[] { "USER" })]
+        [HttpPost]
+        [Authorize]
+        [Description("Bir kullanýcýnýn client tarafýnda oluþturduðu token bilgisini veritabanýna yazar.")]
+        public async Task<string> UpdateClientTokenAndIP(List<Mdl_KeyValue> data)
+        {
+            if (data.Count < 3)
+            {
+                return "Hata! Parametrelerin parse edilemiyor!";
+            }
+
+            string UserID = data[0].Value;
+            string ClientToken = data[1].Value;
+            string LastIP = data[2].Value;
+            //Kullanýcýyý getir güncelle veritabanýna yaz!            
+
+            Mdl_User User = db.User.Where(x => x.ID == Convert.ToInt32(UserID)).FirstOrDefault();
+            User.LastToken = ClientToken;
+            User.LastIP = LastIP; //Clientýn IP adresi kayýt edilir.
+            db.User.Update(User);
+            return (await db.SaveChangesAsync()).ToString();
+        }
+
         #endregion
-    
+
+        #region GET_USERS
+        [Authorize]
+        [SwaggerOperation(Description = "Tüm Kullanýcý Listesini geri döndürür. (Token Gerektirir)",
+        Summary = "Kullanýcý Listesi", Tags = new string[] { "USER" })]
+        [HttpGet]
+        [Description("Tüm Kullanýcý Listesini geri döndürür.")]
+        public List<Mdl_User> Get_Users()
+        {
+            return db.User.ToList<Mdl_User>();
+        }
+        #endregion
+
+        #endregion
+
+        #region CRYPT -ENCRYPT
+
         #region STANDART PASSWORD DECRYPT
 
         [SwaggerOperation(Description = "Uygulama Default Key ile þifrelenen kelimenin þifresini çözer.",
-         Summary = "Default Password Decrypt", Tags = new string[] { "Default Password Decrypt" })]
+         Summary = "Default Key Password Decrypt. (Token Gerektirir)", Tags = new string[] { "CRYPT -ENCRYPT" })]
         [HttpGet]
+        [Authorize]
         [Description("Uygulama Default Key ile þifrelenen kelimenin þifresini çözer.")]
         public string StandartDecrypt(string Text)
         {
@@ -81,12 +133,13 @@ namespace JWT.Controllers
         #region CUSTOM PASSWORD DECRYPT
 
         [SwaggerOperation(Description = "Kullanýcýnýn belirlediði Key  ile þifrelenen kelimenin þifresini çözer.",
-         Summary = "Default Password Decrypt", Tags = new string[] { "Default Password Decrypt" })]
+         Summary = "Custom Key Password Decrypt. (Token Gerektirir)", Tags = new string[] { "CRYPT -ENCRYPT" })]
         [HttpGet]
+        [Authorize]
         [Description("Kullanýcýnýn belirlediði Key  ile þifrelenen kelimenin þifresini çözer.")]
-        public string CustomDecrypt(string Text,string Key)
+        public string CustomDecrypt(string Text, string Key)
         {
-            return Cls_Tools.Decrypt(Text,Key);
+            return Cls_Tools.Decrypt(Text, Key);
         }
 
         #endregion
@@ -94,8 +147,9 @@ namespace JWT.Controllers
         #region STANDART PASSWORD ENCRYPT
 
         [SwaggerOperation(Description = "Uygulama Default Keyi ile text þifreler.",
-         Summary = "Default Password Encrypt", Tags = new string[] { "Default Password Encrypt" })]
+         Summary = "Default Key Password Encrypt. (Token Gerektirir)", Tags = new string[] { "CRYPT -ENCRYPT" })]
         [HttpGet]
+        [Authorize]
         [Description("Uygulama Default Keyi ile text þifreler.")]
         public string StandartEncrypt(string Text)
         {
@@ -107,8 +161,9 @@ namespace JWT.Controllers
         #region CUSTOM PASSWORD ENCRYPT
 
         [SwaggerOperation(Description = "Kullanýcýnýn belirlediði Key ile verilen texti þifreler.",
-         Summary = "Custom Password Encrypt", Tags = new string[] { "Custom Password Encrypt" })]
+         Summary = "Custom Key Password Encrypt. (Token Gerektirir)", Tags = new string[] { "CRYPT -ENCRYPT" })]
         [HttpGet]
+        [Authorize]
         [Description("Kullanýcýnýn belirlediði Key ile verilen texti þifreler.")]
         public string CustomEncrypt(string Text, string Key)
         {
@@ -117,42 +172,7 @@ namespace JWT.Controllers
 
         #endregion
 
-        #region UPDATE_CLIENT_TOKEN_&_IP
-
-        /// <summary>
-        /// Kullanýcýnýn Client tarafýnda bulunan token ve IP bilgisini veritabanýna bulunan kolonlarýný günceller. Her zaman kullanýcýnýn en son ip adresi ve token bilgisi User tablosunda ilgili satýrýnda güncel kalýr.
-        /// Kullanýcýnýn veritabanýnad güncellenen bu alanlarýnýn isimleri, [LastToken] ve [LastIP] alanlarýdýr.
-        /// </summary>
-        [SwaggerOperation(Description = "Bir kullanýcýnýn client tarfýnda oluþturduðu token bilgisini veritabanýna yazar.",
-         Summary = "Client Token Update Database", Tags = new string[] { "Client Token Update Database" })]
-        [HttpPost]
-        [Description("Bir kullanýcýnýn client tarfýnda oluþturduðu token bilgisini veritabanýna yazar.")]
-        public async Task<string> UpdateClientTokenAndIP(List<Mdl_KeyValue> data)
-        {            
-            if(data.Count<3)
-            {
-                return "Hata! Parametrelerin parse edilemiyor!";
-            }
-            
-            string UserID = data[0].Value;
-            string ClientToken= data[1].Value;
-            string LastIP= data[2].Value;
-
-            //Kullanýcýyý getir güncelle veritabanýna yaz!
-
-            DatabaseContext db = new DatabaseContext();
-
-            Mdl_User User = db.User.Where(x => x.ID == Convert.ToInt32(UserID)).FirstOrDefault();
-
-            User.LastToken = ClientToken;
-            User.LastIP = LastIP; //Clientýn IP adresi kayýt edilir.
-
-            db.User.Update(User);
-
-            return (await db.SaveChangesAsync()).ToString();
-        }
-
-        #endregion
+        #endregion      
 
         #endregion
 

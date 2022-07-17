@@ -4,10 +4,7 @@ using AVSGLOBAL.Class.GlobalClass;
 using AVSGLOBAL.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
 using SMTML;
-
-
 
 namespace AVSGLOBAL.Controllers
 {
@@ -28,12 +25,11 @@ namespace AVSGLOBAL.Controllers
         {
             return View();
         }
-
         public IActionResult LoginPageReact()
-        { 
-            return new SMTML.SMTMLReact(new List<string>{"LoginPageReact"}).View();           
+        {           
+            return new Cls_React(new List<string>{"LoginPageReact"}).View();        
         }
-       
+
         [AllowAnonymous]
         [Route("login")]
         [HttpGet]

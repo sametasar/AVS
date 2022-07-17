@@ -122,6 +122,24 @@ namespace AVSGLOBAL.Class.GlobalClass
             return str;
             
         }
+
+        public async Task<List<Mdl_User>> Get_Users(Mdl_User User)
+        {
+            Cls_WebRequestOption options = new Cls_WebRequestOption();
+            options.ActionType = Enm_ActionTypes.Get;
+            options.ApiUrl = "/user/";
+            options.MethodName = "Get_Users";
+            options.Token = User.LastServiceToken; //Servise gidecek requestlerde servisdeki token kullanılmalı!
+            options.TokenType = Enm_TokenTypes.Jwt;
+            
+            options.Url = Cls_Settings.MAIN_WEB_SERVICE;
+
+            string json = await Cls_WebRequest.SendRequest(options);
+
+            List<Mdl_User> UserList = JsonConvert.DeserializeObject<List<Mdl_User>>(json);
+
+            return UserList;
+        }
     
     }
 }

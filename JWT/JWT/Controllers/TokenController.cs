@@ -63,7 +63,7 @@ namespace JWT.Controllers
         /// <seealso cref="IJWT"/>
         /// <seealso cref="Cls_Jwt.Authhenticate(string, string, ConnectionInfo)"/>
         [SwaggerOperation(Description = "Bu web apide bulunan ve Authorize iþlemine tutulan metotlarýn çalýþtýrýlabilmesi için bu metot ile login olunmalýdýr.",
-        Summary = "Login Ýþlemleri", Tags = new string[] { "Login" })]
+        Summary = "Login Ýþlemleri", Tags = new string[] { "AUTHENTICATE" })]
         [AllowAnonymous]
         //[HttpPost("authenticate")]
         [HttpGet]
@@ -88,7 +88,7 @@ namespace JWT.Controllers
         [HttpGet]
         [AllowAnonymous]
         [SwaggerOperation(Description = "Test amaçlý Authorize Ýþlemi Yapar Ve Geriye Bir Token döndürür!.",
-        Summary = "Login Test Ýþlemi", Tags = new string[] { "Test Login" })]
+        Summary = "Login Test Ýþlemi", Tags = new string[] { "AUTHENTICATE" })]
         public IActionResult AuthenticateTest()
         {
             Mdl_User User = IJwtAuthenticationManager.Authhenticate("sametasar@gmail.com", "test", HttpContext.Connection);

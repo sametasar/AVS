@@ -3,6 +3,7 @@ using AVSGLOBAL.Class.GlobalClass;
 using AVSGLOBAL.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SMTML;
 
 
 namespace AVSGLOBAL.Controllers
@@ -40,9 +41,9 @@ namespace AVSGLOBAL.Controllers
             if (!_tokenService.IsTokenValid(token))
             {
                 return (RedirectToAction("Index"));
-            }
+            }              
 
-            return new SMTML.SMTMLReact(new List<string>{"MainPageReact"}).View();       
+            return new Cls_React(new List<string>{"MainPageReact"}).View();    
         }
 
         public IActionResult Error()

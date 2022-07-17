@@ -14,14 +14,27 @@ namespace AVSGLOBAL.Controllers
         private readonly IUser _userRepository;
         private readonly ITokenService _tokenService;
         private string generatedToken = null;
-    public UserController(IConfiguration config, ITokenService tokenService, IUser userRepository)
+        
+        
+        public UserController(IConfiguration config, ITokenService tokenService, IUser userRepository)
         {
             _config = config;
             _tokenService = tokenService;
             _userRepository = userRepository;
         }
 
+        [Authorize]       
+        [HttpGet]        
+        /// <summary>
+        /// Kullanıcı Listesini getirir.
+        /// </summary>     
+        public async Task<List<Mdl_User>> Get_Users()
+        {
+            string UserSession = Cls_Tools.Decrypt(HttpContext.Session.GetString("UserInfo"));     
 
-        
+            Mdl_User User = JsonConvert.DeserializeObject<Mdl_User>(UserSession);
+
+            return await new Cls_User().Get_Users(User);
+        }
     }
 }

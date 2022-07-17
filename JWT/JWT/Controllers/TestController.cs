@@ -50,7 +50,7 @@ namespace JWT.Controllers
 
         [AllowAnonymous]
         [SwaggerOperation(Description = "Test Datalarý Oluþturur.",
-         Summary = "Test Datalarý Oluþtur", Tags = new string[] { "Test Datalarý Oluþturur" })]
+         Summary = "Test Datalarý Oluþtur", Tags = new string[] { "TEST" })]
         [HttpGet]
         [Description("Test Datalarý Oluþtur.")]
         /// <summary>
