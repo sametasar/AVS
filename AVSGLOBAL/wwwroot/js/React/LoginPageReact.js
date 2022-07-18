@@ -1,3 +1,15 @@
+
+ /**
+  Bu class Login sayfasında bulunan kontrollerdeki yazıları tek noktadan yönetmemizi sağlar.
+  @memberof Cls_Login
+  @property {string}   Title       login sayfasının başlık bilgisini tutar.
+  @property {string}   UserName    Login sayfasında kullanıcı adı kontrolüne girilen değerleri tutar.
+  @property {string}   Password    Login sayfasında Password kontrolüne girilen değeri tutar.
+  @property {string}   Remember    Beni hatırla bilgisini barındırır.
+  @property {string}   Button      Login buton bilgilerini üzerinde tutar.
+  @property {string}   Register    Register bilgisini tutar.
+  @property {string}   Forgot      Şifremi unuttum bilgisini üzerinde tutar.
+  */
 class Cls_Login {
 
     constructor(Title, UserName, Password, Remember,Button,Register,Forgot) {
@@ -13,6 +25,7 @@ class Cls_Login {
 
 var LoginObject = new Cls_Login();
 
+///Sayfa ilk açıldığında çalışır sayfa değişkenlerini ilklendirir.
 function Init() {
     LoginObject.Title = "AVS GLOBAL SUPPLY " +TranslateControl(2) +" "+ TranslateControl(9);
     LoginObject.UserName = "";
@@ -25,6 +38,7 @@ function Init() {
 
 Init();
 
+///Başlık komponenti.Login sayfasının başlık bilgisi buarada belirlenir.
 class LoginTitle extends React.Component {
     render() {
         return (
@@ -37,6 +51,7 @@ class LoginTitle extends React.Component {
     }
 }
 
+///Kullanıcı adı girişinin yapıldığı textbox kontrolü.
 class UserName extends React.Component {
 
     constructor() {
@@ -69,6 +84,7 @@ class UserName extends React.Component {
     }
 }
 
+///Kullanıcı şifresinin yazıldığı komponent.
 class Password extends React.Component {
 
     constructor() {
@@ -102,6 +118,7 @@ class Password extends React.Component {
     }
 }
 
+///Beni hatırla kontrolüne ait komponent.
 class Remember extends React.Component {
     render() {
         return (
@@ -119,6 +136,7 @@ class Remember extends React.Component {
     }
 }
 
+///Giriş butonuna ait komponent.
 class LoginButton extends React.Component {
 
     LoginTest() {
@@ -144,6 +162,7 @@ class LoginButton extends React.Component {
     }
 }
 
+///Kayıt butonuna ait komponenet.
 class Register extends React.Component {
     render() {
         return (
@@ -155,6 +174,7 @@ class Register extends React.Component {
 }
 
 
+///Şifremi unuttum kontrolüne ait komponent.
 class Forgot extends React.Component {
     render() {
         return (
@@ -165,6 +185,7 @@ class Forgot extends React.Component {
     }
 }
 
+///React komponentlerinin render edilmesini ve sayfa eklenmesini gerçekleştiren metot.
 function RenderReact() {
 
     class LoginForm extends React.Component {
@@ -198,10 +219,3 @@ function RenderReact() {
 }
 
 RenderReact();
-
-// Bir dijital ürün ve kullanıcıları birbirini beklemeden (400ms den daha kısa bir sürede) etkileşimde bulunuyorsa, verimlilik dorukta olur.
-// setTimeout(function(){
-
-//     RenderReact();
-
-// }, 400); 

@@ -6,7 +6,11 @@ using AVSGLOBAL.Interface;
 namespace AVSGLOBAL.Class.Dal
 {
 
-public enum Enm_Database_Type
+    /// <summary>
+    /// appsetting.json dosyasında bulunan "SelectDatabseEngine" ile ilişkilidir.
+    /// amacı tek bir noktadan uygulamanın veritabanını değiştirebilmesidir.
+    /// </summary>
+    public enum Enm_Database_Type
     {
         SqlServer =1,
 

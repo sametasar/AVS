@@ -1,5 +1,18 @@
 ﻿var TabloSayi =0;
 
+function Title(text)
+{
+   if($(".PageTitle").length>0)
+   {
+        $(".PageTitle").html(text);      
+   }
+   else
+   {
+    setTimeout(function() {           
+        Title();
+    }, 100);
+   }    
+}
 
 function TableToJson(Table) {
 debugger;
