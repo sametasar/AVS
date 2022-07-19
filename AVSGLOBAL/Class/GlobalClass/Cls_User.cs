@@ -1,15 +1,6 @@
 ﻿using AVSGLOBAL.Models.GlobalModel;
 using AVSGLOBAL.Interface;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using AVSGLOBAL.Class.Dal;
 using Newtonsoft.Json;
-using System.Net;
-using System.IO;
-using System.Text;
-using System.Net.Http.Headers;
-using System.Dynamic;
 
 namespace AVSGLOBAL.Class.GlobalClass
 {

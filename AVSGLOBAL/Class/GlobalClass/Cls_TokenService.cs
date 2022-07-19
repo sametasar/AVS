@@ -1,54 +1,70 @@
 ﻿using AVSGLOBAL.Models.GlobalModel;
 using AVSGLOBAL.Interface;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace AVSGLOBAL.Class.GlobalClass
 {
-    
+    /* #region  ROLES, PERMISSION */
     /// <summary>
     /// Normal Authorize attribute e ek özellikler kazandırıyorum. Bunların başında token çalındığında farklı bir konumda o token kullanılırsa.
     /// Token ip değişikliğini algılayacak ve çalışmaz hale gelecek.
     /// </summary>
-    public class AuthorizeAction: IAuthorizationFilter {
-    private readonly string _actionName;
-    private readonly string _roleType;
-            
-    public AuthorizeAction(string actionName, string roleType) {
-        _actionName = actionName;
-        _roleType = roleType;
-    }
-    public void OnAuthorization(AuthorizationFilterContext context) {
-        string _roleType = context.HttpContext.Request?.Headers["role"].ToString();
-        switch (_actionName) {
-            case "MainWindow":
-                if (!_roleType.Contains("Admin")) context.Result = new JsonResult("Permission denined!");
-            break;
-        }
-    }
-}
+    public class AuthorizeAction : IAuthorizationFilter
+    {
+        /* #region  PROPERTIES */
+        private readonly string _actionName;
+        private readonly string _roleType;
+        /* #endregion */
 
-    public class AuthorizeAVS: TypeFilterAttribute {
-    public AuthorizeAVS(string actionName, string roleType): base(typeof(AuthorizeAction)) {
-        Arguments = new object[] {
+        /* #region  STRUCTURE */
+        public AuthorizeAction(string actionName, string roleType)
+        {
+            _actionName = actionName;
+            _roleType = roleType;
+        }
+        /* #endregion */
+
+        /* #region  EVENTS */
+        public void OnAuthorization(AuthorizationFilterContext context)
+        {
+            string _roleType = context.HttpContext.Request?.Headers["role"].ToString();
+            switch (_actionName)
+            {
+                case "MainWindow":
+                    if (!_roleType.Contains("Admin")) context.Result = new JsonResult("Permission denined!");
+                    break;
+            }
+        }
+        /* #endregion */
+    }
+
+    /// <summary>
+    /// Yetkilendirme için geliştirilmiştir.Rollere dayalı yetkilendirme için yapılmıştır.
+    /// </summary>
+    public class AuthorizeAVS : TypeFilterAttribute
+    {
+        public AuthorizeAVS(string actionName, string roleType) : base(typeof(AuthorizeAction))
+        {
+            Arguments = new object[] {
             actionName,
             roleType
         };
+        }
     }
-}
+    /* #endregion */
 
-
+    /* #region  AUTHORIZATION - AUTHENTICATE - TOKEN */
+    /// <summary>
+    /// Token oluşturma ve token doğrulama gibi tüm token işlemleri bu class içinde yapılmaktadır.
+    /// </summary>
     public class Cls_TokenService : ITokenService
-    {              
+    {
+        /* #region  BUILD TOKEN */
         /// <summary>
         /// Yeni bir JWT Token oluşturmak üzere geliştirilmiştir.
         /// </summary>
@@ -88,7 +104,6 @@ namespace AVSGLOBAL.Class.GlobalClass
             Claim ClaimD = new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(ClaimUserInfo));
             Claim ClaimE = new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString());
 
-           
             ClaimListesi.Add(ClaimD);
             ClaimListesi.Add(ClaimE);
 
@@ -102,14 +117,16 @@ namespace AVSGLOBAL.Class.GlobalClass
             SymmetricSecurityKey SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Cls_Settings.JWTKEY));
             SigningCredentials Credentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256Signature);
             JwtSecurityToken TokenDescriptor = new JwtSecurityToken(Cls_Settings.JWTISSUER, Cls_Settings.JWTISSUER, ClaimListesi,
-            expires: DateTime.Now.AddMinutes(Cls_Settings.TokenExpireMinute), signingCredentials: Credentials);          
+            expires: DateTime.Now.AddMinutes(Cls_Settings.TokenExpireMinute), signingCredentials: Credentials);
             //Tokeni Şifreliyorum yada diğer bir değişle filtreliyorum Obje İçinde Taşırken json dönüşümlerinde patlıyor, patlamaması için json karakterlerini değiştiriyorum DeCrypt ederek eski haline getirebilirsin!
             return new JwtSecurityTokenHandler().WriteToken(TokenDescriptor);
 
             #endregion          
 
         }
+        /* #endregion */
 
+        /* #region  BUILD SERVICE TOKEN */
 
         /// <summary>
         /// Main web serviceden gelen token ayarlarını tokena dönüştüren metot.
@@ -120,19 +137,14 @@ namespace AVSGLOBAL.Class.GlobalClass
         {
             return new JwtSecurityTokenHandler().WriteToken(TokenDescriptor);
         }
+        /* #endregion */
 
-        //public string GenerateJSONWebToken(string key, string issuer, Mdl_UserDTO user)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        //    var token = new JwtSecurityToken(issuer, issuer,
-        //      null,
-        //      expires: DateTime.Now.AddMinutes(120),
-        //      signingCredentials: credentials);
-
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
+        /* #region  IsTokenValid */
+        /// <summary>
+        /// Tokenin geçerliliğini kontrol eden metot.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public bool IsTokenValid(string token)
         {
             var mySecret = Encoding.ASCII.GetBytes(Cls_Settings.JWTKEY);
@@ -157,5 +169,7 @@ namespace AVSGLOBAL.Class.GlobalClass
             }
             return true;
         }
+        /* #endregion */
     }
+    /* #endregion */
 }

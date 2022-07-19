@@ -2,7 +2,11 @@
 
 namespace AVSGLOBAL.Class.GlobalClass
 {
-      public class Mdl_Claim
+    /* #region  CLAIM */
+    /// <summary>
+    /// Kullanıcıya kimlik kartı claim için gerekli bilgiler bu class ile gerçekleşir.
+    /// </summary>
+    public class Mdl_Claim
     {
         public Mdl_User User { get; set; }
 
@@ -11,11 +15,11 @@ namespace AVSGLOBAL.Class.GlobalClass
     }
 
 
-        /// <summary>
-        /// Oluşturulan Token Çalındıında Extra Güvenlik Mekanizması İçin Oluşturulmuştur.Tokeni Çalan kişinin IP adresi, tarayıcı bilgisi ve timestamp bilgileri burada kontrol edilir.
-        /// Bilgilerden herhangi biri tutarsız olursa extra yazacaqğınız güvenlik mekanizması kodlarıyla token hırsızlıını durdurabilirsiniz. Tokeni çalan kişi tokeni çalsa bile işlem yapamaz.
-        /// </summary>
-        public class Mdl_ClaimUserData
+    /// <summary>
+    /// Oluşturulan Token Çalındıında Extra Güvenlik Mekanizması İçin Oluşturulmuştur.Tokeni Çalan kişinin IP adresi, tarayıcı bilgisi ve timestamp bilgileri burada kontrol edilir.
+    /// Bilgilerden herhangi biri tutarsız olursa extra yazacaqğınız güvenlik mekanizması kodlarıyla token hırsızlıını durdurabilirsiniz. Tokeni çalan kişi tokeni çalsa bile işlem yapamaz.
+    /// </summary>
+    public class Mdl_ClaimUserData
     {
         /// <summary>
         /// Tokeni oluşturan kullanıcının ip adresi.
@@ -32,4 +36,5 @@ namespace AVSGLOBAL.Class.GlobalClass
         /// </summary>
         public double TimeStamp { get; set; }
     }
+    /* #endregion */
 }

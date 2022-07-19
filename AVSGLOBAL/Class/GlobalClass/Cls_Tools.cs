@@ -1,9 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 using System.Text;
-using System.IO;
 using System.Security.Cryptography;
 using Microsoft.Data.Sqlite;
 

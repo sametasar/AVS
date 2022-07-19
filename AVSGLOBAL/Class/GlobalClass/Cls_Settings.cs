@@ -1,88 +1,225 @@
 ﻿namespace AVSGLOBAL.Class.GlobalClass
 {
 
-     public static class Cls_DefaultMsSql
+    /* #region  MS SQL */
+    /// <summary>
+    /// Uygulamanın kullandığı default ms sql erişim bilgileri statik değişkenler ile tüm projede bu class üzerinden erişilebilir.
+    /// </summary>
+    public static class Cls_DefaultMsSql
     {
+        /// <summary>
+        /// Kullanıcı adı bilgisi
+        /// </summary>
+        /// <value></value>
         public static string UserName { get; set; }
 
+        /// <summary>
+        /// Şifre bilgisi.
+        /// </summary>
+        /// <value></value>
         public static string Password { get; set; }
 
+        /// <summary>
+        /// Veri kaynağı server ip adresi yada adı.
+        /// </summary>
+        /// <value></value>
         public static string Server { get; set; }
 
+        /// <summary>
+        /// Veritabanının adı.
+        /// </summary>
+        /// <value></value>
         public static string Database { get; set; }
 
     }
+    /* #endregion */
 
+    /* #region  MY SQL */
+    /// <summary>
+    /// Uygulamanın kullandığı default my sql erişim bilgileri statik değişkenler ile tüm projede bu class üzerinden erişilebilir.
+    /// </summary>
     public static class Cls_DefaultMySql
     {
+        /// <summary>
+        /// Kullanıcı adı bilgisi
+        /// </summary>
+        /// <value></value>
         public static string UserName { get; set; }
 
+        /// <summary>
+        /// Şifre bilgisi.
+        /// </summary>
+        /// <value></value>
         public static string Password { get; set; }
 
+        /// <summary>
+        /// Veri kaynağı server ip adresi yada adı.
+        /// </summary>
+        /// <value></value>
         public static string Server { get; set; }
 
+        /// <summary>
+        /// Veritabanının adı.
+        /// </summary>
+        /// <value></value>
         public static string Database { get; set; }
 
     }
 
+    /* #endregion */
 
+    /* #region  ORACLE */
+    /// <summary>
+    /// Uygulamanın kullandığı default oracle erişim bilgileri statik değişkenler ile tüm projede bu class üzerinden erişilebilir.
+    /// </summary>
     public static class Cls_DefaultOracle
     {
+        /// <summary>
+        /// Kullanıcı adı bilgisi
+        /// </summary>
+        /// <value></value>
         public static string UserName { get; set; }
 
+        /// <summary>
+        /// Şifre bilgisi.
+        /// </summary>
+        /// <value></value>
         public static string Password { get; set; }
 
+        /// <summary>
+        /// Veri kaynağı server ip adresi yada adı.
+        /// </summary>
+        /// <value></value>
         public static string Server { get; set; }
 
+        /// <summary>
+        /// Veritabanının adı.
+        /// </summary>
+        /// <value></value>
         public static string Database { get; set; }
 
     }
+    /* #endregion */
 
+    /* #region  POSTGRE SQL */
+    /// <summary>
+    /// Uygulamanın kullandığı default postgre sql erişim bilgileri statik değişkenler ile tüm projede bu class üzerinden erişilebilir.
+    /// </summary>
     public static class Cls_DefaultPostgreSql
     {
+        /// <summary>
+        /// Kullanıcı adı bilgisi
+        /// </summary>
+        /// <value></value>
         public static string UserName { get; set; }
 
+        /// <summary>
+        /// Şifre bilgisi.
+        /// </summary>
+        /// <value></value>
         public static string Password { get; set; }
 
+        /// <summary>
+        /// Veri kaynağı server ip adresi yada adı.
+        /// </summary>
+        /// <value></value>
         public static string Server { get; set; }
 
+        /// <summary>
+        /// Veritabanının adı.
+        /// </summary>
+        /// <value></value>
         public static string Database { get; set; }
 
     }
+    /* #endregion */
 
-
+    /* #region  MONGO DB */
+    /// <summary>
+    /// Uygulamanın kullandığı default mongo db erişim bilgileri statik değişkenler ile tüm projede bu class üzerinden erişilebilir.
+    /// </summary>
     public static class Cls_DefaultMongodb
     {
+        /// <summary>
+        /// Kullanıcı adı bilgisi
+        /// </summary>
+        /// <value></value>
         public static string UserName { get; set; }
 
+        /// <summary>
+        /// Şifre bilgisi.
+        /// </summary>
+        /// <value></value>
         public static string Password { get; set; }
 
+        /// <summary>
+        /// Veri kaynağı server ip adresi yada adı.
+        /// </summary>
+        /// <value></value>
         public static string Server { get; set; }
 
+        /// <summary>
+        /// Veritabanının adı.
+        /// </summary>
+        /// <value></value>
         public static string Database { get; set; }
 
     }
+    /* #endregion */
 
-  
+    /* #region  SQL LITE */
+    /// <summary>
+    /// Uygulamanın kullandığı default sql lite erişim bilgileri statik değişkenler ile tüm projede bu class üzerinden erişilebilir.
+    /// </summary>
     public static class Cls_DefaultSqlLite
     {
+        /// <summary>
+        /// Sqllite dosyasının bulunduğu dizin bilgisi.
+        /// </summary>
+        /// <value></value>
         public static string Directory { get; set; }
 
+        /// <summary>
+        /// Sqllite dosyasının adı.
+        /// </summary>
+        /// <value></value>
         public static string DataSource { get; set; }
 
+        /// <summary>
+        /// Sql lite versiyon bilgisi
+        /// </summary>
+        /// <value></value>
         public static int Version { get; set; }
 
+        /// <summary>
+        /// Sqllite default time out süresi.
+        /// </summary>
+        /// <value></value>
         public static int DefaultTimeout { get; set; }
 
+        /// <summary>
+        /// Değer True olduğunda veritabanı dosyasını bulamazsa bir hata mesajı oluşturur. False olduğunda ise veritabanını bulamazsa yenir tane oluşturur.
+        /// </summary>
+        /// <value></value>
         public static bool FailIfMissing { get; set; }
 
+        /// <summary>
+        /// sqllite dosyası eğer şifreli ise şifre burada tanımlanmalı.
+        /// </summary>
+        /// <value></value>
         public static string Password { get; set; }
 
+        /// <summary>
+        /// Bağlantı readonlu kullanılacaksa true olmalı default false dır.
+        /// </summary>
+        /// <value></value>
         public static bool Readonly { get; set; }
 
     }
 
+    /* #endregion */
 
+    /* #region  SETTINGS */
     /// <summary>
     /// Projenin tüm ayarları buradan yönetilir.Default veritabanı bağlantı bilgileri.Default email hesap bilgileri,token ayar bilgileri.
     /// </summary>
@@ -130,7 +267,7 @@
         /// Kapsama alanı
         /// </summary>
         public static string JWTAUDIENCE { get; set; }
-       
+
         /// <summary>
         /// Oluşturulan Jwt tokenin dakika olarak sistemde geçerli olacağı süre.
         /// </summary>
@@ -153,6 +290,7 @@
         /// </summary>
         /// <value></value>
         public static string MAIN_WEB_SERVICE { get; set; }
-    } 
- 
+    }
+    /* #endregion */
+
 }
