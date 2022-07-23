@@ -8,6 +8,7 @@ using AVSGLOBAL.Class.Dal;
 using AVSGLOBAL.Class.GlobalClass;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -37,6 +38,8 @@ Cls_Settings.SelectDatabseEngine = builder.Configuration["Settings:SelectDatabse
 //Ana Web Servisi Burada Belirtiyoruz! Tüm Gelen Requestleri Buraya Aktarabiliriz! Extar güvenli bir yapı inşaa edilmek istenirse.
 //Ana servisin ip adresi bu sayede yalnızca bizim tarafımızdan bilinecek istenildiği durumda ip trafiği değiştirilebilinecek.
 Cls_Settings.MAIN_WEB_SERVICE = builder.Configuration["Settings:MAIN_WEB_SERVICE"];
+
+Cls_Tools.Hosting = builder.Environment;
 
 /* #region  DEFAULT MS SQL CONNECTION */
 Cls_DefaultMsSql.UserName = builder.Configuration.GetSection("MSSQL").GetSection("USER").Value; //  Configuration["MSSQLUSER"];

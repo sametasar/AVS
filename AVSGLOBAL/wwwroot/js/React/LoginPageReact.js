@@ -173,7 +173,6 @@ class Register extends React.Component {
     }
 }
 
-
 ///Şifremi unuttum kontrolüne ait komponent.
 class Forgot extends React.Component {
     render() {
